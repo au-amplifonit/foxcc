@@ -1,0 +1,894 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/scss/functions";
+//@import '~bootstrap/scss/custom';
+@import "~bootstrap/scss/variables";
+@import "./assets/sass/general.scss";
+@import "~ngx-toastr/toastr";
+@import "app/cust-profile/acc-det/acc-det.component"; /* TO CHECK */
+@import "~ngx-ui-switch/ui-switch.component.scss";
+
+@import "~@fullcalendar/core/main.css";
+@import "~@fullcalendar/daygrid/main.css";
+@import "~@fullcalendar/timegrid/main.css";
+
+$btn-border-radius: 2.5rem;
+$btn-border-radius-lg: 2.5rem;
+$btn-border-radius-sm: 2.5rem;
+
+//$primary-color: #c5003e;
+//$btn-outline-primary: color($primary-color);
+//
+
+// ...
+
+/*
+
+// todo: verify this
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+// todo: verify this
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+*/
+
+body {
+  font-family: rubik !important;
+  height: auto;
+  overflow-y: overlay;
+}
+
+fcw-appointment-modal {
+  height: 100%;
+}
+
+.modal-fixed-right {
+  position: fixed !important;
+  margin: auto !important;
+  width: 100% !important;
+  max-width: 30rem !important;
+  height: 100% !important;
+  transition: all 1s ease-in-out;
+}
+
+.quick-fixed-right {
+  position: fixed !important;
+  margin: auto !important;
+  width: 100% !important;
+  max-width: 25rem !important;
+  height: 100% !important;
+  transition: all 1s ease-in-out;
+}
+
+.modal-fixed-right .modal-content {
+  height: 100% !important;
+  overflow-y: auto !important;
+}
+
+.quick-fixed-right .modal-content {
+  height: 100% !important;
+  overflow-y: auto !important;
+}
+
+.modal.fade .modal-dialog {
+  right: 1rem !important;
+}
+
+.modal.fade.in .modal-dialog {
+  right: 0 !important;
+}
+
+.justify-content-space-between {
+  justify-content: space-between;
+}
+
+.black {
+  color: #000000;
+}
+
+$theme-colors: (
+  primary: #c5003e,
+  secondary: $gray-600,
+  success: $green,
+  info: $cyan,
+  warning: $yellow,
+  danger: $red,
+  light: $gray-100,
+  dark: #252631,
+  // black: #123123,
+    maize: #fbc450,
+  brown-grey-939: #939393,
+  // white: #123123,
+    brownish-grey: #5b5b5b,
+  grassy-green: #4b8e03,
+  warm-brown: #955101,
+  cherry: #cd0a41,
+  lightish-blue: #4d7cfe,
+  blue-grey-778: #778ca2,
+  brown-grey-888: #888888,
+  pale-grey-f2f: #f2f4f6,
+  pale-grey-f8f: #f8fafb,
+  very-light-blue: #e8ecef,
+  blue-grey-98a: #98a9bc,
+  bright-light-blue-2ce: #2ce5f6,
+  mango: #ffab2b,
+  apple: #6dd230,
+  barbie-pink: #fe4d97,
+  rose-red: #c5003e,
+  pale-grey-f1f: #f1f5ff,
+  dark-lime-green: #6dd400,
+  ruby: #cc0641,
+  bright-light-blue-32c: #32c5ff,
+  ice-blue: #effdff,
+  yellow-orange: #f7b500
+);
+
+h1 {
+  font-family: rubik;
+  font-size: 30px !important;
+  font-weight: 400 !important;
+  margin: 0px !important;
+}
+h1.light {
+  font-weight: 300 !important;
+}
+h1.medium {
+  font-weight: 500 !important;
+}
+
+h2 {
+  font-family: rubik;
+  font-size: 26px !important;
+  font-weight: 400 !important;
+  margin: 0px !important;
+}
+h2.light {
+  font-weight: 300 !important;
+  margin: 0px !important;
+}
+h2.medium {
+  font-weight: 500 !important;
+  margin: 0px !important;
+}
+h2.white {
+  color: white;
+}
+h2.grey {
+  color: grey;
+}
+
+h3 {
+  font-family: rubik;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  margin: 0px !important;
+}
+h3.light {
+  font-weight: 300 !important;
+}
+h3.medium {
+  font-weight: 500 !important;
+}
+h3.white {
+  color: white;
+}
+h3.grey {
+  color: grey;
+}
+h3.black {
+  color: black;
+}
+h3.blue {
+  color: blue;
+}
+
+h4 {
+  font-family: rubik;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  margin: 0px !important;
+}
+h4.light {
+  font-weight: 300 !important;
+}
+h4.medium {
+  font-weight: 500 !important;
+}
+h4.white {
+  color: white;
+}
+h4.grey {
+  color: grey;
+}
+h4.black {
+  color: black;
+}
+h4.blue {
+  color: blue;
+}
+h4.red {
+  color: red;
+}
+
+h5 {
+  font-family: rubik;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  margin: 0px !important;
+}
+h5.light {
+  font-weight: 300 !important;
+}
+h5.medium {
+  font-weight: 500 !important;
+}
+h5.white {
+  color: white;
+}
+h5.grey {
+  color: grey;
+}
+h5.black {
+  color: black;
+}
+h5.blue {
+  color: blue;
+}
+h5.red {
+  color: red;
+}
+
+.regular-text {
+  font-family: rubik;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 21px;
+}
+.regular-text.light {
+  font-weight: 300 !important;
+}
+.regular-text.medium {
+  font-weight: 500 !important;
+}
+.regular-text.dark {
+  color: black;
+}
+.regular-text.grey {
+  color: grey;
+}
+
+.secondary-text {
+  font-family: rubik;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 21px;
+}
+
+.secondary-text-small {
+  font-family: rubik;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 18px;
+}
+
+.list {
+  font-family: rubik;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 33px;
+}
+
+label {
+  font-family: rubik;
+  font-size: 14px;
+  font-weight: 300 !important;
+  color: map-get($map: $theme-colors, $key: blue-grey-778);
+  margin: 0px !important;
+}
+
+label.black {
+  color: #000000 !important;
+}
+
+select {
+  font-family: rubik;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  color: map-get($map: $theme-colors, $key: blue-grey-778) !important;
+  // background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
+  //   no-repeat right #ddd;
+  // -webkit-appearance: none;
+  // background-position-x: calc(100% - 10px);
+  border: 1px solid #a1b7ce !important;
+  background-color: #fdfdfd !important;
+}
+/* Point the arrow upwards when the select box is open (active): */
+/* Style items (options): */
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: red transparent transparent transparent !important;
+}
+
+select[disabled] {
+  background-color: #e9ecef !important;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent red transparent !important;
+  top: 7px;
+}
+
+option {
+  border-radius: 50% !important;
+}
+// .icon-box, img{
+//   width: 30px;
+//   height: 30px;
+// }
+
+button {
+  border: none;
+  background: none;
+}
+
+img.icon {
+  width: 30px;
+  height: 30px;
+}
+
+img.icon-s {
+  width: 20px;
+  height: 20px;
+}
+
+svg-icon.s {
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+svg-icon.xs {
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@import "~bootstrap/scss/bootstrap";
+@import "node_modules/ngx-bootstrap/datepicker/bs-datepicker.scss";
+
+.page-item.active .page-link {
+  background: #dc3546 !important;
+  border: 1px solid #dc3546 !important;
+  border-radius: 5px;
+  color: #f8fafb !important;
+}
+.page-link {
+  background: #f8fafb !important;
+  color: #333333 !important;
+  border: 0;
+  outline: 0;
+  margin: 0;
+  box-shadow: none !important;
+}
+
+.alert {
+  text-align: center !important;
+}
+
+.lead {
+  margin: 0px !important;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.error-msg-hint {
+  color: red;
+  font-size: 14px;
+}
+
+.toastr-button {
+  color: white;
+  background-color: #000 !important;
+  border-color: white !important;
+  padding: 0px 20px 0px 20px;
+}
+
+svg-icon.success-icon-color path {
+  float: left;
+  fill: white !important;
+}
+
+.success-title {
+  font-weight: 300 !important;
+  font-size: 15px !important;
+  vertical-align: middle !important;
+}
+.icon {
+  display: inline-block !important;
+  width: 20% !important;
+  height: 20% !important;
+  background-image: url("/assets/img/svg/checkmark-circle-outline_2.svg");
+}
+.row-toastr {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -5px;
+  margin-left: -50px;
+}
+
+.main-container {
+  background-color: white;
+  padding: 10px;
+  min-height: calc(90vh - 10px);
+}
+
+tr[data-time] > .fc-widget-content:last-child {
+  border: 0px solid transparent;
+}
+
+.fc-time-grid .fc-slats td {
+  height: 2.5em;
+  display: flex;
+}
+
+.fc-time-grid-event .fc-content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 400;
+  font-size: 15px;
+  height: 100%;
+}
+fcw-cust-app {
+  width: 100%;
+}
+fcw-cust-app-list {
+  width: 100%;
+}
+fcw-cust-app-list-item {
+  width: 100%;
+}
+
+.arrow-down-rotation {
+  transform: rotate(180deg);
+  transition: 0.3s;
+  color: #000000;
+}
+
+.arrow-up-rotation {
+  transform: rotate(0deg);
+  transition: 0.3s;
+  color: #000000;
+}
+
+.disabled {
+  pointer-events: none; //This makes it not clickable
+  opacity: 0.6;
+} //This grays it out to look disabled
+.custom-error-toastr {
+  background-color: #f76504 !important;
+  color: #ffffff;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 6px;
+  padding: 0.75rem 1.25rem 0.75rem 50px;
+  width: 300px;
+  background-position: 15px center;
+  background-repeat: no-repeat;
+  background-size: 24px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+  pointer-events: auto;
+
+  background-image: url("./../src/assets/img/svg/close-circle-outline.svg");
+
+  .toast-title {
+    font-weight: bold;
+  }
+  .toast-message {
+    word-wrap: break-word;
+  }
+  .toast-message a:hover {
+    text-decoration: underline;
+  }
+  .toast-close-button {
+    position: relative;
+    right: -0.3em;
+    top: -0.3em;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    color: inherit;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.5;
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+  .toast-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    background-color: #000000;
+    opacity: 0.3;
+  }
+  .toast-close-button:hover,
+  .toast-close-button:focus {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.75;
+  }
+}
+
+.custom-error-toastr :hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+modal-container:nth-of-type(2) {
+  z-index: 2000 !important;
+  background: #000000ab;
+}
+
+.relative {
+  position: relative;
+}
+
+.main-content {
+  min-height: calc(100vh - 12rem);
+}
+
+//multiselect
+
+#filters {
+  .c-btn {
+    background: #fff;
+    color: #333;
+  }
+
+  .selected-list .c-list .c-token {
+    background: #0079fe;
+  }
+  .selected-list .c-list .c-token .c-label {
+    color: #fff;
+  }
+  .selected-list .c-list .c-token .c-remove svg {
+    fill: #fff;
+  }
+
+  .selected-list .c-angle-down svg,
+  .selected-list .c-angle-up svg {
+    fill: #333;
+  }
+
+  .dropdown-list ul li:hover {
+    background: #f5f5f5;
+  }
+
+  .arrow-up,
+  .arrow-down {
+    border-bottom: 15px solid #fff;
+  }
+
+  .arrow-2 {
+    border-bottom: 15px solid #ccc;
+  }
+
+  .list-area {
+    border: 1px solid #ccc;
+    background: #fff;
+    box-shadow: 0px 1px 5px #959595;
+  }
+
+  .select-all {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .list-filter {
+    border-bottom: 1px solid #ccc;
+  }
+  .list-filter .c-search svg {
+    fill: #888;
+  }
+  .list-filter .c-clear svg {
+    fill: #888;
+  }
+
+  .pure-checkbox input[type="checkbox"]:focus + label:before,
+  .pure-checkbox input[type="checkbox"]:hover + label:before {
+    border-color: #0079fe;
+    background-color: #f2f2f2;
+  }
+
+  .pure-checkbox input[type="checkbox"] + label {
+    color: #000;
+  }
+
+  .pure-checkbox input[type="checkbox"] + label:before {
+    color: #0079fe;
+    background-color: #cccccc;
+    border: 1px solid #868e96;
+  }
+  .pure-checkbox input[type="checkbox"] + label:after {
+    background-color: #0079fe;
+  }
+
+  .pure-checkbox input[type="checkbox"]:disabled + label:before {
+    border-color: #cccccc;
+  }
+
+  .pure-checkbox input[type="checkbox"]:disabled:checked + label:before {
+    background-color: #cccccc;
+  }
+
+  .pure-checkbox input[type="checkbox"] + label:after {
+    border-color: #ffffff;
+  }
+
+  .pure-checkbox input[type="radio"]:checked + label:before {
+    background-color: white;
+  }
+
+  .pure-checkbox input[type="checkbox"]:checked + label:before {
+    background: #0079fe;
+    border-color: #0079fe;
+  }
+
+  .single-select-mode
+    .pure-checkbox
+    input[type="checkbox"]:focus
+    + label:before,
+  .single-select-mode
+    .pure-checkbox
+    input[type="checkbox"]:hover
+    + label:before {
+    border-color: #0079fe;
+    background-color: #f2f2f2;
+  }
+
+  .single-select-mode .pure-checkbox input[type="checkbox"] + label {
+    color: #000;
+  }
+
+  .single-select-mode .pure-checkbox input[type="checkbox"] + label:before {
+    color: transparent !important;
+    border: 0px solid #0079fe;
+  }
+
+  .single-select-mode .pure-checkbox input[type="checkbox"] + label:after {
+    background-color: transparent !important;
+  }
+
+  .single-select-mode
+    .pure-checkbox
+    input[type="checkbox"]:disabled
+    + label:before {
+    border-color: #cccccc;
+  }
+
+  .single-select-mode
+    .pure-checkbox
+    input[type="checkbox"]:disabled:checked
+    + label:before {
+    background-color: #cccccc;
+  }
+
+  .single-select-mode .pure-checkbox input[type="checkbox"] + label:after {
+    border-color: #0079fe;
+  }
+
+  .single-select-mode
+    .pure-checkbox
+    input[type="radio"]:checked
+    + label:before {
+    background-color: white;
+  }
+
+  .single-select-mode
+    .pure-checkbox
+    input[type="checkbox"]:checked
+    + label:before {
+    background: none !important;
+  }
+
+  .selected-item {
+    background: #e9f4ff;
+  }
+
+  .btn-iceblue {
+    background: #0079fe;
+    border: 1px solid #ccc;
+    color: #fff;
+  }
+}
+
+.col-content {
+  position: relative;
+  width: 100%;
+  padding-right: 25px;
+  padding-left: 45px;
+}
+
+//scrollbar
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background:#888;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #666;
+  // border-radius: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.btn-outline-primary {
+  color: #c5003e;
+  border-color: #c5003e;
+  border-width: 2px !important;
+}
+
+.btn-outline-primary:hover {
+  color: #ffffff;
+  border-color: #c5003e;
+}
+
+.text-custom {
+  font-size: 1.6em;
+  margin: 4px 0px;
+}
+
+.dropdown-list.animated.fadeIn {
+  z-index: 999999 !important;
+}
+
+.fixxer {
+  padding: 0px 3px 0 0;
+}
+
+fcw-notes {
+  width: 100% !important;
+}
+
+button.col-md-1.blue-bordered {
+  cursor: pointer;
+}
+
+.fc-content {
+  cursor: pointer;
+}
+
+@media (min-width: 1023px) and (max-width: 1080px) {
+  .btn.btn-outline-primary.col-sm-4.col-md-5.offset-1.p-1 {
+    font-size: 10px !important;
+  }
+
+  .col-md-1.blue-bordered  {
+    padding: unset;
+  }
+
+  .col-md-2.offset-1.blue-bordered {
+    padding: unset;
+  }
+
+  .d-flex.flex-direction-column {
+    font-size: 10px;
+  }
+
+  input[bsdatepicker].col-md-5.height {
+    padding: unset;
+  }
+
+  .mb-0.h6.text-secondary {
+    font-size: 10px !important;
+  }
+
+  .align-middle.ml-3 {
+    font-size: 12px;
+  }
+
+  .btn.btn-outline-primary {
+    font-size: 10px;
+  }
+
+  .dynamic-area {
+    margin-left: 65px !important;
+  }
+}
+
+.alert.alert-danger {
+  font-weight: 500;
+  background-color: rgba(197, 0, 62, 0.15) !important;
+  color: #c5003e;
+}
+
+body {
+  background-color: lightgray;
+  padding-top: 56px !important;
+}
+
+.fixed-top {
+  position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+.dynamic-area {
+  margin-left: 150px;
+    align-items: center;
+    width: 100%;
+}
+
+fcw-customer-search-widget {
+  width: 100%;
+}
+
+::ng-deep .bs-datepicker-container {
+  width: 100% !important;
+  padding: 0px !important;
+}
+
+::ng-deep .bs-datepicker-body {
+  border: none!important;
+}
+
+::ng-deep .bs-datepicker-body table td span {
+  border-radius: unset !important;
+}
+
+::ng-deep .bs-datepicker {
+  box-shadow: none !important;
+}
+
+::ng-deep bs-datepicker-inline-container {
+  width: 100% !important;
+}
+
+::ng-deep bs-days-calendar-view {
+  width: 100% !important;
+}

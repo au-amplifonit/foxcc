@@ -1,0 +1,15 @@
+<div class="d-flex logobox bg-white fixed-top">
+  <div class="d-flex">
+      <div>
+          <button type="button p-0" (click)="setHamMenuOpen()" [ngClass]="show ? 'text-dark' : '' ">
+            <i [ngClass]="show ? 'fas fa-times' : 'fas fa-bars'"></i>
+          </button>
+      </div>
+        <div class="p-0 img-logo align-items-center d-flex">
+          <img src="../../../../assets/img/logos/primary@2x.png" class="img-fluid align-items-center" alt="Amplifon logo">
+      </div>
+  </div>
+  <div class="d-flex dynamic-area">
+    <ng-template DynamicHeader></ng-template>
+  </div>
+</div>

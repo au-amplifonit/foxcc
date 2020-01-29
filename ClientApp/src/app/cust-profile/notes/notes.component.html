@@ -1,0 +1,22 @@
+<div class="d-flex flex-column mx-6">
+  <div class="d-flex justify-content-between">
+    <div class="text-custom">Notes</div>
+    <button (click)="openTheModal()" class="btn btn-outline-primary">
+      New note
+    </button>
+  </div>
+  <div class="m-0">
+    <fcw-filters class="m-1"></fcw-filters>
+    <div class="fake-content relative">
+      <fcw-note-list *ngIf="notes" [notes]="notes" class="m-1"></fcw-note-list>
+      <ngx-spinner
+        [fullScreen]="false"
+        [name]="'spinner'"
+        bdColor="rgba(255,255,255,1)"
+        color="#c5003e"
+        type="ball-spin-clockwise"
+        size="medium"
+      ></ngx-spinner>
+    </div>
+  </div>
+</div>

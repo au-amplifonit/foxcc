@@ -1,0 +1,48 @@
+<div ngbDropdown class="d-inline-block">
+  <button
+    class="btn dropdown-toggle shadow-none"
+    (click)="$event.stopPropagation()"
+    ngbDropdownToggle
+    style="padding: unset !important;"
+  >
+    <span class="fas fa-ellipsis-v text-secondary"></span>
+  </button>
+  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+    <ul class="list-group">
+      <li *ngFor="let menuItem of menuItems">
+        <a
+          *ngIf="menuItem.url && !data.isLead && !menuItem.eventName"
+          class="dropdown-item p-1 px-2"
+          (click)="navigateTo(menuItem.id, menuItem.url, data.id)"
+          routerLinkActive="active"
+        >
+          <svg-icon
+            class="xs m-1"
+            [src]="menuItem.icon"
+            [applyCss]="true"
+          ></svg-icon>
+          {{ menuItem.text }}
+        </a>
+        <a
+          *ngIf="menuItem.url && data.isLead && !menuItem.eventName"
+          class="dropdown-item p-1 px-2"
+          [routerLink]="[menuItem.url]"
+          [queryParams]="{ xid: data.xid }"
+          [state]="data"
+          routerLinkActive="active"
+        >
+          <svg-icon class="xs m-1" [src]="menuItem.icon"></svg-icon>
+          {{ menuItem.text }}
+        </a>
+        <p
+          class="dropdown-item m-0"
+          *ngIf="menuItem.eventName"
+          (click)="launchEvent(menuItem.eventName, $event)"
+        >
+        <svg-icon class="xs m-1" [src]="menuItem.icon"></svg-icon>
+        {{ menuItem.text }}
+        </p>
+      </li>
+    </ul>
+  </div>
+</div>

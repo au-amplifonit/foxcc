@@ -1,0 +1,174 @@
+<div class="main-container m-4">
+    <div class="pt-4 pr-4 pl-4">
+        <div class="row">
+          <div class="col-md-12">
+            <h1>
+              Clinic
+            </h1>
+          </div>
+          <ng-container
+            *ngIf="showCustomerClinic; then customerClinic; else chooseClinic"
+          >
+          </ng-container>
+        </div>
+        <div class="row my-2 justify-content-between">
+          <div class="col-md-5 p-0 d-flex">
+            <div class="col-md-6">
+              <label *ngIf="services" class="fullWidth" for="appointmentType">
+                <span class="d-flex flex-direction-column">Appointment Type</span>
+                <select
+                  disabled
+                  id="appointmentType"
+                  class="fullWidth"
+                  name="appointmentType"
+                >
+                  <option
+                    *ngFor="let service of services"
+                    [selected]="service.code === appointmentParams.serviceCode"
+                    [value]="service.code"
+                  >
+                    {{ service.description }}
+                  </option>
+                </select>
+              </label>
+            </div>
+            <div class="col-md-6">
+              <label *ngIf="services" class="fullWidth" for="appointmentDuration">
+                <span class="d-flex flex-direction-column">Appointment Duration</span>
+                <select
+                  disabled
+                  id="appointmentDuration"
+                  class="fullWidth"
+                  name="appointmentDuration"
+                >
+                  <option
+                    *ngFor="let timeSlot of timeSlots"
+                    [selected]="timeSlot.time === appointmentParams.slotSize"
+                    [value]="timeSlot.time"
+                  >
+                    {{ timeSlot.time }}
+                  </option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <div class="col-md-7 pt-0 pb-0 pr-5 d-flex align-items-end">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="col-md-5 height"
+                  placeholder="Appointments Date"
+                  bsDatepicker
+                  #dp="bsDatepicker"
+                  useUtc="true"
+                  [ngModel]="datePickerValue"
+                  (ngModelChange)="pickerChanged($event)"
+                  [bsValue]="bsValue"
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [bsConfig]="{
+                    containerClass: 'theme-default',
+                    dateInputFormat: 'DD/MM/YYYY'
+                  }"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-outline-secondary calendar col-md-12 height py-0 "
+                    (click)="dp.toggle()"
+                    type="button"
+                  >
+                    <svg-icon
+                      class="xs p-0"
+                      src="../../../../assets/img/svg/book-appointment-grey_2.svg "
+                    ></svg-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button [ngClass]="{disabled: disableToday}" [disabled]="disableToday" (click)="handleToday()" class="col-md-2 blue-bordered">
+              Today
+            </button>
+            <button
+              (click)="handlePrev()"
+              class="col-md-1 blue-bordered"
+              [disabled]="disablePrev"
+            >
+              &lt;
+            </button>
+            <button
+              (click)="handleNext()"
+              class="col-md-1 blue-bordered"
+              [disabled]="disableNext"
+            >
+              &gt;
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid  pt-1 pl-4 pr-4 pb-4 relative">
+        <div class="d-flex m-1 p-0">
+          <h3>Week {{ weekNumber }}</h3>
+        </div>
+        <full-calendar
+          #calendar
+          (eventClick)="handleEventClick($event)"
+          nowIndicator="true"
+          [contentHeight]="800"
+          [defaultDate]="bsValue"
+          minTime="08:00"
+          maxTime="20:00"
+          [allDaySlot]="false"
+          header="false"
+          defaultView="timeGridWeek"
+          [events]="events"
+          [plugins]="calendarPlugins"
+          [columnHeaderFormat]="calendarOptions"
+        ></full-calendar>
+      
+        <ngx-spinner
+          [fullScreen]="false"
+          [name]="'spinner'"
+          bdColor="rgba(255,255,255,1)"
+          color="#c5003e"
+          type="ball-spin-clockwise"
+          size="medium"
+        ></ngx-spinner>
+      </div>
+</div>
+
+<ng-template #customerClinic>
+  <div class="col-md-12 d-flex flex-direction-row align-items-center">
+    <h1>
+      {{ clinic }}
+    </h1>
+    <span style="cursor: pointer;" class="d-inline-block ml-2" (click)="openInfoModal()"
+      ><img
+        src="../../../assets/img/svg/info-icon.svg"
+        alt=""
+        style="height: 20px; width: auto;"
+    /></span>
+    <div class="col-md-1">
+      (<a class="change-clinic-btn" (click)="handleClinicChange($event)"
+        >change</a
+      >)
+    </div>
+  </div>
+</ng-template>
+<ng-template #chooseClinic>
+  <div class="col-md-12 d-flex flex-row align-items-center">
+    <div class="mr-3">
+      <h1>
+        Choose Clinic
+      </h1>
+    </div>
+    <div>
+      <select (change)="handleSetClinic($event)" placeholder="Clinics">
+        <option *ngFor="let clinic of clinics" [value]="clinic.code">
+          {{ clinic.description }}
+        </option>
+      </select>
+    </div>
+  </div>
+</ng-template>

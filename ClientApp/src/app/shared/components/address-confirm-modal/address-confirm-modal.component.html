@@ -1,0 +1,59 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Address Check</h4>
+  <button
+    (click)="bsModalRef.hide()"
+    type="button"
+    class="btn-danger btn-sm p-0"
+  >
+    <svg-icon
+      class="s"
+      src="../../../../assets/img/svg/close-red.svg"
+    ></svg-icon>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="Addressform">
+    <div class="form-group">
+      <span class="titleFieldCard">Address Line 1</span>
+      <input
+        class="form-control"
+        formControlName="addressLine1"
+        type="text"
+        [ngClass]="{ 'has-error': !Addressform.controls['addressLine1'].valid }"
+      />
+      <span class="titleFieldCard">Address Line 2</span>
+      <input class="form-control" formControlName="addressLine2" type="text" />
+      <span class="titleFieldCard">Locality</span>
+      <input class="form-control" formControlName="locality" type="text" />
+      <span class="titleFieldCard">City</span>
+      <input
+        class="form-control"
+        formControlName="city"
+        type="text"
+        [ngClass]="{ 'has-error': !Addressform.controls['city'].valid }"
+      />
+      <span class="titleFieldCard">State Code</span>
+      <input
+        class="form-control"
+        formControlName="stateCode"
+        type="text"
+        [ngClass]="{ 'has-error': !Addressform.controls['stateCode'].valid }"
+      />
+      <span class="titleFieldCard">Zip Code</span>
+      <input
+        class="form-control"
+        formControlName="zipCode"
+        type="text"
+        [ngClass]="{ 'has-error': !Addressform.controls['zipCode'].valid }"
+      />
+    </div>
+  </form>
+</div>
+<div class="modal-footer d-flex justify-content-between">
+  <button type="button" class="btn btn-primary" (click)="bsModalRef.hide()">
+    Cancel
+  </button>
+  <button type="button" [disabled]="!Addressform.valid" class="btn btn-primary" (click)="onConfirm()">
+    Confirm
+  </button>
+</div>

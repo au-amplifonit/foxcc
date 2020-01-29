@@ -1,0 +1,86 @@
+fcw-acc-det{
+  width: 100%;
+}
+
+.card-header{
+  background: #f8f9fa;
+  border-bottom: unset;
+}
+
+.card-body{
+  background: #f8f9fa;
+}
+
+
+.radio-form-positioning {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-form-container {
+  margin : 5px;
+}
+
+.radio-span-text {
+  margin: 5px;
+}
+
+.fullWidth {
+  width: 100%;
+  min-height: 4vh;
+}
+
+.has-error {
+  border: 1px solid red !important;
+}
+
+.ng-invalid.has-error {
+  border: 1px solid red !important;
+}
+
+.ng-dirty.ng-invalid.has-error {
+  border: 1px solid red !important;
+}
+
+.ng-dirty.ng-valid.has-error {
+  border-color: none !important;
+}
+
+.no-padding-left {
+  padding-left: 0px!important;
+}
+
+.theme-default .bs-datepicker-head {
+  background-color: #f8f9fa!important;
+}
+
+.bs-datepicker-head button {
+  color: #000000!important;
+}
+
+.theme-default .bs-datepicker-body table td span.selected, .theme-default .bs-datepicker-body table td.selected span, .theme-default .bs-datepicker-body table td span[class*=select-]:after, .theme-default .bs-datepicker-body table td[class*=select-] span:after {
+  background-color: #cd013e!important;
+}
+
+span.is-highlighted {
+  background: #cd013e!important;
+  color: #ffffff;
+}
+
+.toast-success {
+  background-color: #000!important;
+  background-image: url('/assets/img/svg/checkmark-circle-outline_2.svg');
+}
+
+.col-sm-4.col-md-5.ml-custom-1 {
+  margin-left: 50px !important;
+}
+
+.col-sm-4.col-md-5.d-flex.justify-content-end.ml-custom-2 {
+  margin-left: 90px !important;
+}
+
+.mr-form {
+  padding: 0px !important;
+  margin-right: 4px;
+}

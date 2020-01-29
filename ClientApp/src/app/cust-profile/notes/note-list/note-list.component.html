@@ -1,0 +1,17 @@
+<div class="primary">
+  <span *ngFor="let item of notes">
+    <div *ngFor="let noteMonth of item" class="d-flex flex-column">
+      <div class="m-1 p-2">
+        <h3>{{ noteMonth[0].date | date: "MMMM yyyy" }}</h3>
+        <ul class="timeline">
+          <fcw-note-list-item
+            *ngFor="let note of noteMonth"
+            [note]="note"
+            [hasElipsis]="true"
+            [clientActions]="null"
+          ></fcw-note-list-item>
+        </ul>
+      </div>
+    </div>
+  </span>
+</div>

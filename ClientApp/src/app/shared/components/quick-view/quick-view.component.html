@@ -1,0 +1,86 @@
+<div class="p-4" *ngIf="customer">
+  <div class="m-0 text-right">
+    <button type="button" class="btn-danger btn-sm p-0" (click)="bsModalRef.hide()">
+      <svg-icon class="s" src="../../../../assets/img/svg/close-red.svg"></svg-icon>
+    </button>
+  </div>
+
+      <div class="h3 text-center" (click)="goToProfile()">
+         {{customer.firstname}} {{customer.lastname}}
+      </div>
+  <div class="text-center">
+
+    <span class="badge p-2 m-1" [ngClass]="{
+        'badge-success' : customer.statusDescription === 'Active' || customer.statusDescription === 'Active Lead',
+        'badge-warning' : customer.statusDescription === 'Do Not Contact' || customer.statusDescription === 'Transferred',
+        'badge-dark' : customer.statusDescription === 'Deceased',
+        'badge-danger' : customer.statusDescription === 'Deleted'
+      }">{{customer.statusDescription}}</span>
+    <span class="badge badge-info text-info bg-white border border-info p-2 m-1">{{customer.fundingType}}</span>
+    <!--
+      <span *ngIf="customer.isLead" class="badge badge-warning p-2 m-1">Lead</span>
+      -->
+  </div>
+</div>
+
+<div class="modal-body bg-light">
+  <div class="m-1 p-2 bg-white" *ngFor="let product of customer.lastHAItemHistory">
+    <div class="d-flex" style="justify-content: space-evenly;">
+      <fcw-product-view [product]="product"></fcw-product-view>
+      <div class="col-1">
+        <fcw-ellipsis-button [data]="customerNetxAppointment" [menuItems]="null" (ellipsisPoppedUp)="null"
+          (ellipsisEvent)="null"></fcw-ellipsis-button>
+      </div>
+    </div>
+  </div>
+  <div class="m-1 p-2 bg-white" *ngIf="customerNetxAppointment">
+    <div class="d-flex" style="justify-content: space-evenly;">
+      <div class="col-11">
+        <div class="d-flex">
+          <h4 class="medium pr-1">Next Appointment</h4>
+        </div>
+        <div>
+          <h5 class="badge my-1 badge-secondary">
+            {{ customerNetxAppointment.serviceDescription }}
+          </h5>
+        </div>
+        <div class="d-flex flex-row mt-2">
+          <h4 class="medium">{{ customerNetxAppointment.appointmentDate | date: 'EEEE, MMMM d, y' }}</h4>
+          <h4 class="grey light d-inline-block pl-2"> {{ customerNetxAppointment.appointmentDate | date: 'HH:MM' }}</h4>
+        </div>
+        <div>
+          <h4 class="medium d-inline-blockmt-2">Clinic:</h4>
+          {{ customerNetxAppointment.appointmentShopDescription ? customerNetxAppointment.appointmentShopDescription : customerNetxAppointment.customer.shopDescription }}
+          <span style="cursor: pointer;" class="d-inline-block ml-2" (click)="openInfoModal()" ><img src="../../../assets/img/svg/info-icon.svg"
+              style="height: 20px; width: auto;" /></span>
+        </div>
+        <div>
+          <h4 class="medium d-inline-block">Clinician:</h4> {{ customerNetxAppointment.employeeName }}
+        </div>
+      </div>
+      <div class="col-1">
+        <fcw-ellipsis-button [data]="customerNetxAppointment" [menuItems]="null" (ellipsisPoppedUp)="null"
+          (ellipsisEvent)="null"></fcw-ellipsis-button>
+      </div>
+    </div>
+    <div class="d-flex justify-content-around pt-2">
+        <button class="btn btn-outline-primary" [disabled]="disabled"
+         style="height: 38px" (click)="confirmAppointment(customerNetxAppointment.rowGuid)">
+          CONFIRM APPOINTMENT
+        </button>
+    </div>
+  </div>
+  <div class="m-1 p-2 bg-white">
+    <form>
+      <div class="form-group">
+        <textarea class="form-control" placeholder="Insert here your note..." rows="3" [formControl]="noteForm"></textarea>
+      </div>
+    </form>
+    <div class="d-flex justify-content-around pt-2">
+      <button class="btn btn-outline-primary" [disabled]="disabledSaveNoteButton"
+       style="height: 38px" (click)="saveNote()">
+        SAVE YOUR NOTE
+      </button>
+  </div>
+  </div>
+</div>

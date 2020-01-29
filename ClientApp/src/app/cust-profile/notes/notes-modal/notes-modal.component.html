@@ -1,0 +1,68 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left text-custom">Notes</h4>
+  <button
+    type="button"
+    class="close pull-right"
+    aria-label="Close"
+    (click)="close()"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="noteForm">
+    <div class="d-flex flex-column">
+      <div class="d-flex mb-3 justify-content-between">
+          <div class="col-3">
+              <input
+              formControlName="employee"
+              class="form-control"
+              type="text"
+              id="employee"
+            />
+            </div>
+        <div class="col-3">
+          <input
+            formControlName="date"
+            class="form-control"
+            type="text"
+            id="birthday"
+            bsDatepicker
+            disabled
+            [bsValue]="today"
+            [bsConfig]="{
+              dateInputFormat: 'DD-MM-YYYY',
+              containerClass: 'theme-default',
+              adaptivePosition: true
+            }"
+            placement="right"
+          />
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="col-12">
+          <textarea
+            formControlName="description"
+            class="form-control"
+            cols="30"
+            rows="10"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer d-flex justify-content-between">
+  <button type="button" class="btn btn-primary" (click)="close()">
+        Close
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="!this.noteForm.controls['description'].valid"
+    (click)="submitNote()"
+  >
+    Confirm
+  </button>
+</div>

@@ -1,0 +1,36 @@
+div.logobox{
+  height: 3.5rem;
+}
+
+.header-bar {
+  display: flex;
+  flex-direction: row;
+}
+
+nav {
+  .navbar-header {
+    width: 25%;
+    border: 1px solid black;
+  }
+}
+
+ul.nav.navbar-nav {
+  border: 1px solid black;
+  background-color: gray;
+  height: 100vh;
+}
+button:focus,
+button {
+  outline: none;
+  height: 100%;
+  width: 3.5rem;
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1.5rem;
+}
+
+.img-logo{
+  width: 146px;
+  height: 50px;
+}

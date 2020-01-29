@@ -1,0 +1,30 @@
+<accordion>
+  <accordion-group [isOpen]="isOtherContactPreferred">
+    <div (click)="toggleAccordionGroup($event)" class="btn btn-link btn-block clearfix" accordion-heading>
+      <div class="pull-left float-left">
+        <div class="d-flex align-items-center">
+          <div class="d-flex flex-row align-content-center">
+            <div [className]="localAccordionToggler ? 'arrow-down-rotation' : 'arrow-up-rotation'" class="p-1 m-1 black">
+                <i class="fas fa-angle-up fa-2x"></i>
+            </div>
+          </div>
+
+          <ng-content select="[head]"></ng-content>
+        </div>
+      </div>
+      <fcw-ellipsis-button
+        *ngIf="showButton"
+        [menuItems]="dataMenu"
+        (ellipsisEvent)="bubbleEvent($event)"
+        class="float-right pull-right"
+        (ellipsisPoppedUp)="setEllipsisToggle($event)"
+      ></fcw-ellipsis-button>
+    </div>
+    <div class="card-body p-0">
+      <ng-content select="[body]"></ng-content>
+    </div>
+    <div class="card-footer" *ngIf="footerHidden">
+      <ng-content select="[foot]"></ng-content>
+    </div>
+  </accordion-group>
+</accordion>

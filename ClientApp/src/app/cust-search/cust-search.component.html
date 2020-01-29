@@ -1,0 +1,81 @@
+<!-- <ng-http-loader></ng-http-loader> -->
+<div *ngIf="contextClinical" class="main-header">
+    <div class="d-flex justify-content-end offset-sm-2 h-100">
+          <button
+            class="btn btn-outline-primary m-2"
+            style="height: 38px"
+            (click)="toggleAppointmentModal()"
+          >
+            CANCEL
+          </button>
+        </div>
+</div>
+<div class="d-flex flex-row">
+  <fcw-search-form
+    class="col-md-2 px-0 bg-white"
+    *ngIf="srcFormOn"
+    (clientList)="fillSearchResult($event)"
+    (errorClientList)="fillSearchResultError($event)"
+    (custParamOut)="setCustParam($event)"
+    (initGet)="handleLoader($event)"
+  ></fcw-search-form>
+  <div class="col bg-light">
+    <div class="row my-3">
+      <div class="col-md-1 p-0 mbtn">
+        <button
+          class="p-0"
+          [ngClass]=" srcFormOn ? 'negative-margin' : ''"
+          (click)="srcFormOn = !srcFormOn"
+        >
+          <svg-icon *ngIf="srcFormOn" class="s" src="../../../../assets/img/svg/arrow-dropleft-circle_2.svg"></svg-icon>
+          <svg-icon *ngIf="!srcFormOn" class="s" src="../../../../assets/img/svg/ampli-mini-red.svg"></svg-icon>
+        </button>
+      </div>
+    </div>
+    <div class="row main-content" ngxUiLoaderBlurred blur="0">
+
+      <div class="main-content col-content overflow-auto">
+          <fcw-sorters
+          *ngIf="clientList !== undefined && clientList?.recordCount > 1"
+          [custPar]="custParam"
+          (clientList)="fillSearchResult($event)"
+          (errorClientList)="fillSearchResultError($event)"
+          (loadingStatus)="handleLoader($event)"
+        ></fcw-sorters>
+        <div
+          *ngIf="clientList !== undefined && clientList?.recordCount === 0"
+          class="text-center mt-2"
+        >
+          No results found 
+          <span *ngIf="phoneNumber">
+            <button
+            class="btn btn-outline-primary mx-2"
+            style="height: 38px;vertical-align:middle;"
+            (click)="test()"
+          >
+            Reschedule Client
+          </button>
+          </span>
+        </div>
+        <fcw-client-list
+          *ngIf="clientList"
+          [clientList]="clientList"
+          [contextClinical]="contextClinical"
+        ></fcw-client-list>
+        <p class="alert alert-danger text-break" role="alert" *ngIf="error">
+          {{ error }}
+        </p>
+      </div>
+      <ngx-spinner bdColor="rgba(255,255,255,1)" color="#c5003e" [fullScreen]="false" type="ball-spin-clockwise" size="medium"></ngx-spinner>
+    </div>
+    <footer class="row footer">
+      <div class="container">
+        <fcw-pagination
+          [custPar]="custParam"
+          (clientList)="fillSearchResult($event)"
+          (errorClientList)="fillSearchResultError($event)"
+        ></fcw-pagination>
+      </div>
+    </footer>
+  </div>
+</div>

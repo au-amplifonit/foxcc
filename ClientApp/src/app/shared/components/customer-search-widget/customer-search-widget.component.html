@@ -1,0 +1,25 @@
+    <div class="justify-content-between d-flex align-items-center">
+      <div class="d-flex">
+          <h5 class="main-title">Customer Search</h5>
+          <h5
+            class="main-title pl-4 text-secondary"
+            *ngIf="clientList !== undefined && clientList?.recordCount > 0"
+          >
+            {{ clientList.pageRequested * 20 + 1 }}-{{
+              20 * (clientList.pageRequested + 1) > clientList.recordCount
+                ? clientList.recordCount
+                : 20 * (clientList.pageRequested + 1)
+            }}
+            of {{ clientList.recordCount }} Customers
+          </h5>
+      </div>
+      <div class="mr-2">
+        <button
+          class="btn btn-outline-primary"
+          style="height: 38px"
+          (click)="nav('/main/custProfile/acc-det')"
+        >
+          NEW CUSTOMER
+        </button>
+      </div>
+    </div>

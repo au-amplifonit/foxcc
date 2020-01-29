@@ -1,0 +1,173 @@
+<div class="bg-secondary min-vh-100 h-100 px-0" style="background-color: lightgray !important;">
+
+  <div class="d-flex flex-column main-container border m-3">
+    <div class="d-flex flex-row justify-content-between px-2 py-4">
+      <div>
+        <ng-container *ngIf="clinicWasSelected; then customerClinic; else chooseClinic"></ng-container>
+      </div>
+      <button *ngIf="clinicWasSelected" type="button" class="btn btn-outline-danger rounded-pill"
+        (click)="goToNewAppointment()">
+          New Appointment
+      </button>
+    </div>
+    <div class="d-flex flex-row relative">
+      <div class="col-4 p-0">
+        <div>
+          <bs-datepicker-inline 
+            [bsValue]="dayDate" 
+            [bsConfig]="{ containerClass: 'theme-default' }"
+            (bsValueChange)="onChange($event)"
+            [minDate]="minDate"
+            [maxDate]="maxDate">
+        </bs-datepicker-inline>
+        </div>
+        <hr class="p-2" />
+        <div class="relative fake-content mt-2">
+          <ngx-spinner bdColor="rgba(255,255,255,1)" color="#c5003e" [fullScreen]="false" type="ball-spin-clockwise"
+            size="medium" name="spinner2"></ngx-spinner>
+          <div class="p-2" *ngIf="clinicWasSelected && clinicAddress">
+            <h4 class="medium">National Hearing Care {{ selectedClinicData.name }}</h4>
+
+            <h5 class="medium pt-2 pb-1">Address</h5>
+            <ng-container *ngFor="let item of clinicAddress.address;let idx = index">
+              <p *ngIf="item !== null" class="regular-text grey p-0 m-0">
+                  {{item}}
+              </p>
+            </ng-container>
+            <p class="regular-text grey p-0 m-0">
+              {{ clinicAddress.city }},{{ clinicAddress.zipCode }}
+            </p>
+
+            <h5 class="medium pt-2 pb-1">Phone Numbers</h5>
+            <ng-container *ngFor="let item of clinicAddress.phones; let idx = index">
+              <p *ngIf="item !== null" class="regular-text grey p-0 m-0">
+                phone {{idx + 1}} : 04 {{ item }}
+              </p>
+            </ng-container>
+
+            <h5 class="medium pt-2 pb-1">Extra Information</h5>
+            <p class="regular-text grey p-0 m-0">
+              {{ clinicAddress.extraInfo }}
+            </p>
+            <hr>
+          </div>
+          <div *ngIf="clinicWasSelected">
+            <h5 class="medium pl-2 pt-2 pb-1">Audiologist:</h5>
+            <div class="p-2 d-flex" *ngFor="let clinician of workingClinicians">
+              <h4>{{ clinician.clinicianTypeDescription }}:</h4>
+              <h5 class="ml-1 d-flex align-items-center">
+                <u>{{ clinician.description }}</u>
+              </h5>
+            </div>
+            <div class="p-2">
+              <!-- <h4>CSO:</h4>
+                  <a href="#">Jane Evans</a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-8 pl-4">
+        <div class="d-flex flex-row justify-content-start">
+          <h2>{{ dayDate | date: 'EEEE, dd' }}</h2>
+          <button (click)="isCollapsed = !isCollapsed" type="button" class="ml-5 px-3 badge badge-secondary"
+            *ngIf="clinicWasSelected && customerAppointments">
+            Filters
+          </button>
+        </div>
+        <div id="filters" *ngIf="isCollapsed">
+          <div *ngIf="isCollapsed" class="row flex-row mt-2" style="margin: 0 5px !important">
+            <div class="col-md-4 mt-2">
+              <div class="row">
+                <div class="col-1" style="padding: unset;">
+                  <span
+                    style="content: url('./../../assets/img/svg/filter.svg'); width: 20px; height: 20px; margin-top: 8px;"></span>
+                </div>
+                <div class="col-11" style="padding-left: 0px;">
+                  <angular2-multiselect [data]="audilogistList" [(ngModel)]="selectedFilters.audiologist"
+                    [settings]="audiologistDropdownSetting" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event)">
+                  </angular2-multiselect>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-2">
+              <div class="row">
+                <div class="col-1" style="padding: unset;">
+                  <span
+                    style="content: url('./../../assets/img/svg/filter.svg'); width: 20px; height: 20px; margin-top: 8px;"></span>
+                </div>
+                <div class="col-11" style="padding-left: 0px;">
+                  <angular2-multiselect [data]="typeList" [(ngModel)]="selectedFilters.status"
+                    [settings]="typeDropdownSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event)">
+                  </angular2-multiselect>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-4 mt-2">
+              <div class="row">
+                <div class="col-1" style="padding: unset;">
+                  <span
+                    style="content: url('./../../assets/img/svg/filter.svg'); width: 20px; height: 20px; margin-top: 8px;"></span>
+
+                </div>
+                <div class="col-11" style="padding-left: 0px;">
+                  <angular2-multiselect [data]="serviceList" [(ngModel)]="selectedFilters.type"
+                    [settings]="statusDropdownSetting" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event)">
+                  </angular2-multiselect>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="d-flex flex-column relative" style="margin-top: 20px; min-height: 600px;">
+          <div *ngIf="
+              !clinicWasSelected ||
+              (clinicWasSelected && customerAppointments?.length === 0)
+            ">
+            <p class="regular-text grey p-0 m-0">No appointments booked.</p>
+          </div>
+          <ngx-spinner class="mt-3" bdColor="rgba(255,255,255,1)" color="#c5003e" [fullScreen]="false"
+            type="ball-spin-clockwise" size="medium" name="spinner"></ngx-spinner>
+          <ng-container *ngIf="clinicWasSelected && customerAppointments">
+            <fcw-cust-app-list-item *ngFor="let appointment of customerAppointments" [isPreview]="false"
+              [appointment]="appointment" [clinicSchedule]="true" [isClinic]="true"></fcw-cust-app-list-item>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #customerClinic>
+  <div class="col-md-12 d-flex flex-direction-row align-items-center" style="padding-left: 0px !important;">
+    <h1>
+      {{ selectedClinicData.name }}
+    </h1>
+    <div class="col-md-1">
+      (<a class="change-clinic-btn" (click)="handleClinicChange()">change</a>)
+    </div>
+  </div>
+</ng-template>
+<ng-template #chooseClinic>
+  <div class="col-md-12 d-flex flex-row align-items-center" style="padding-left: 0px !important;">
+    <div class="mr-3">
+      <h1>
+        Choose Clinic
+      </h1>
+    </div>
+    <div *ngIf="clinics">
+      <select class="form-control" (change)="handleSetClinic($event)" placeholder="Clinics">
+        <option *ngFor="let clinic of clinics" [value]="[clinic.code, clinic.description]">
+          {{ clinic.description }}
+        </option>
+      </select>
+    </div>
+  </div>
+</ng-template>

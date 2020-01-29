@@ -1,0 +1,156 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+    <!-- Set this to true if you enable server-side prerendering -->
+    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <Configurations>Debug;Release;SIT;PROD</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp.old\**" />
+    <Compile Remove="ClientApp\.git\**" />
+    <Compile Remove="ClientApp\.vscode\**" />
+    <Compile Remove="ClientApp\.vs\**" />
+    <Compile Remove="publish\**" />
+    <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp.old\**" />
+    <Content Remove="ClientApp\.git\**" />
+    <Content Remove="ClientApp\.vscode\**" />
+    <Content Remove="ClientApp\.vs\**" />
+    <Content Remove="publish\**" />
+    <EmbeddedResource Remove="ClientApp.old\**" />
+    <EmbeddedResource Remove="ClientApp\.git\**" />
+    <EmbeddedResource Remove="ClientApp\.vscode\**" />
+    <EmbeddedResource Remove="ClientApp\.vs\**" />
+    <EmbeddedResource Remove="publish\**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp.old\**" />
+    <None Remove="ClientApp\.git\**" />
+    <None Remove="ClientApp\.vscode\**" />
+    <None Remove="ClientApp\.vs\**" />
+    <None Remove="publish\**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="appsettings.Debug.json" />
+    <Content Remove="appsettings.PROD.json" />
+    <Content Remove="appsettings.Release.json" />
+    <Content Remove="appsettings.SIT.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\.git\config" />
+    <None Remove="ClientApp\.git\description" />
+    <None Remove="ClientApp\.git\HEAD" />
+    <None Remove="ClientApp\.git\hooks\applypatch-msg.sample" />
+    <None Remove="ClientApp\.git\hooks\commit-msg.sample" />
+    <None Remove="ClientApp\.git\hooks\fsmonitor-watchman.sample" />
+    <None Remove="ClientApp\.git\hooks\post-update.sample" />
+    <None Remove="ClientApp\.git\hooks\pre-applypatch.sample" />
+    <None Remove="ClientApp\.git\hooks\pre-commit.sample" />
+    <None Remove="ClientApp\.git\hooks\pre-push.sample" />
+    <None Remove="ClientApp\.git\hooks\pre-rebase.sample" />
+    <None Remove="ClientApp\.git\hooks\pre-receive.sample" />
+    <None Remove="ClientApp\.git\hooks\prepare-commit-msg.sample" />
+    <None Remove="ClientApp\.git\hooks\update.sample" />
+    <None Remove="ClientApp\.git\index" />
+    <None Remove="ClientApp\.git\info\exclude" />
+    <None Remove="ClientApp\.git\logs\HEAD" />
+    <None Remove="ClientApp\.git\logs\refs\heads\development" />
+    <None Remove="ClientApp\.git\logs\refs\heads\master" />
+    <None Remove="ClientApp\.git\logs\refs\remotes\origin\HEAD" />
+    <None Remove="ClientApp\.git\objects\pack\pack-4139922cefda87fe558eabd9c76395c344095323.idx" />
+    <None Remove="ClientApp\.git\objects\pack\pack-4139922cefda87fe558eabd9c76395c344095323.pack" />
+    <None Remove="ClientApp\.git\packed-refs" />
+    <None Remove="ClientApp\.git\refs\heads\development" />
+    <None Remove="ClientApp\.git\refs\heads\master" />
+    <None Remove="ClientApp\.git\refs\remotes\origin\HEAD" />
+    <None Remove="ClientApp\.vscode\launch.json" />
+    <None Remove="ClientApp\.vscode\settings.json" />
+    <None Remove="ClientApp\.vs\ClientApp\v16\.suo" />
+    <None Remove="ClientApp\.vs\ProjectSettings.json" />
+    <None Remove="ClientApp\.vs\slnx.sqlite" />
+    <None Remove="ClientApp\.vs\VSWorkspaceState.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.Debug.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+    <None Include="appsettings.PROD.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+    <None Include="appsettings.Release.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+    <None Include="appsettings.SIT.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <TransformOnBuild>true</TransformOnBuild>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+	</Target>
+
+	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="ng build --configuration=DEBUG --vendor-chunk" Condition="'$(Configuration)' == 'Debug'" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="ng build --configuration=SIT --vendor-chunk" Condition="'$(Configuration)' == 'SIT'" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="ng build --configuration=production --vendor-chunk" Condition="'$(Configuration)' == 'PROD'" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+</Project>

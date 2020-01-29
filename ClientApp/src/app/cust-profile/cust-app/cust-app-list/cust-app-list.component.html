@@ -1,0 +1,16 @@
+<div *ngIf="customerAppointments" class="d-flex flex-column fix primary">
+  <div class="m-1 p-2">
+    <h3>{{ customerAppointments[0].appointmentDate | date: "MMMM yyyy" }}</h3>
+  </div>
+  <div *ngIf="customerAppointments">
+    <fcw-cust-app-list-item
+      *ngFor="let appointment of customerAppointments"
+      [isPreview]="false"
+      [appointment]="appointment"
+      [isClinic]="false"
+      [hasElipsis]="true"
+      [isAppointment]="true"
+      [clientActions]="customerActions"
+    ></fcw-cust-app-list-item>
+  </div>
+</div>

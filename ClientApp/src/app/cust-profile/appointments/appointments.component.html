@@ -1,0 +1,196 @@
+<div class="main-container">
+    <div class="pt-4 pr-4 pl-6">
+        <div *ngIf="customerId || xid" class="column">
+          <ng-template [ngIf]="customer && customer.firstname">
+            <div class="d-flex justify-content-between">
+              <div class="d-flex flex-column align-items-start">
+                <h1>
+                  {{ customer.salutationDescription }}. {{ customer.firstname }}
+                  {{ customer.lastname }}
+                </h1>
+                <ng-container
+                  *ngIf="showCustomerClinic; then customerClinic; else chooseClinic"
+                >
+                </ng-container>
+              </div>
+              <div class="d-flex" *ngIf="!!appointmentToReschedule">
+                <!-- <fcw-cust-app-list-item
+                  *ngIf="!!appointmentToReschedule"
+                  [isPreview]="false"
+                  [isClinic]="false"
+                  [appointment]="appointmentToReschedule"
+                  [hasElipsis]="false"
+                  [reschedule]="true"
+                ></fcw-cust-app-list-item> -->
+                <small class="mr-3 align-self-center">Original Appointment: </small>
+                <fcw-appointment-reschedule
+                  *ngIf="!!appointmentToReschedule"
+                  [appointment]="appointmentToReschedule"
+                ></fcw-appointment-reschedule>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+        <div *ngIf="nullCustomerId" class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-circle fa-lg"></i> Customer not found. Please try again with a research
+        </div>
+        <div class="row my-2 justify-content-between">
+          <div class="col-md-5 p-0 d-flex">
+            <div class="col-md-6">
+              <label *ngIf="services" class="fullWidth" for="appointmentType">
+                <span class="d-flex flex-direction-column">Appointment Type</span>
+                <select
+                  disabled
+                  id="appointmentType"
+                  class="fullWidth"
+                  name="appointmentType"
+                >
+                  <option
+                    *ngFor="let service of services"
+                    [selected]="service.code === appointmentParams.serviceCode"
+                    [value]="service.code"
+                  >
+                    {{ service.description }}
+                  </option>
+                </select>
+              </label>
+            </div>
+            <div class="col-md-6">
+              <label *ngIf="services" class="fullWidth" for="appointmentDuration">
+                <span class="d-flex flex-direction-column">Appointment Duration</span>
+                <select
+                  disabled
+                  id="appointmentDuration"
+                  class="fullWidth"
+                  name="appointmentDuration"
+                >
+                  <option
+                    *ngFor="let timeSlot of timeSlots"
+                    [selected]="timeSlot.time === appointmentParams.slotSize"
+                    [value]="timeSlot.time"
+                  >
+                    {{ timeSlot.time }}
+                  </option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <div class="col-md-7 pt-0 pb-0 pr-5 d-flex align-items-end">
+            <div class="col-md-2 justify-content-end"></div>
+            <div class="col-md-6">
+              <div class=" input-group">
+                <input
+                  type="text"
+                  class="col-md-6 height"
+                  placeholder="Appointments Date"
+                  bsDatepicker
+                  #dp="bsDatepicker"
+                  useUtc="true"
+                  [ngModel]="datePickerValue"
+                  (ngModelChange)="pickerChanged($event)"
+                  [bsValue]="bsValue"
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [bsConfig]="{
+                    containerClass: 'theme-default',
+                    dateInputFormat: 'DD/MM/YYYY'
+                  }"
+                />
+                <div class=" input-group-append">
+                  <button
+                    class="btn btn-outline-secondary calendar py-0  height"
+                    (click)="dp.toggle()"
+                    type="button"
+                  >
+                    <svg-icon
+                      class="xs p-0"
+                      src="../../../../assets/img/svg/book-appointment-grey_2.svg "
+                    ></svg-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button [ngClass]="{disabled: disableToday}" [disabled]="disableToday" (click)="handleToday()" class="col-md-2 offset-1 blue-bordered ">
+              Today
+            </button>
+            <button
+              (click)="handlePrev()"
+              class="col-md-1 blue-bordered "
+              [disabled]="disablePrev"
+            >
+              &lt;
+            </button>
+            <button
+              (click)="handleNext()"
+              class="col-md-1 blue-bordered "
+              [disabled]="disableNext"
+            >
+              &gt;
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid relative pt-1 pl-6 pr-4 pb-4">
+        <div class="d-flex m-0 p-0">
+          <h3>Week {{ weekNumber }}</h3>
+        </div>
+        <full-calendar
+          #calendar
+          (eventClick)="handleEventClick($event)"
+          nowIndicator="true"
+          [contentHeight]="800"
+          [defaultDate]="bsValue"
+          minTime="08:00"
+          maxTime="20:00"
+          [allDaySlot]="false"
+          header="false"
+          defaultView="timeGridWeek"
+          [events]="events"
+          [plugins]="calendarPlugins"
+          [columnHeaderFormat]="calendarOptions"
+        ></full-calendar>
+        <!-- e8e8e8 -->
+        <ngx-spinner
+          [fullScreen]="false"
+          [name]="'spinner'"
+          bdColor="rgba(255,255,255,1)"
+          color="#c5003e"
+          type="ball-spin-clockwise"
+          size="medium"
+        ></ngx-spinner>
+      </div>
+</div>
+
+<ng-template #customerClinic>
+  <div class="d-flex flex-direction-row align-items-center">
+    <h1>
+      {{ customer.shopDescription }}
+    </h1>
+    <span style="cursor: pointer;" class="d-inline-block ml-2" (click)="openInfoModal()"
+      ><img
+        src="../../../assets/img/svg/info-icon.svg"
+        style="height: 20px; width: auto;"
+    /></span>
+    <div class="col-md-1">
+      (<a class="change-clinic-btn" (click)="handleClinicChange($event)"
+        >change</a
+      >)
+    </div>
+  </div>
+</ng-template>
+<ng-template #chooseClinic>
+  <div class="d-flex flex-row align-items-center">
+    <div class="mr-3">
+      <h1>
+        Choose Clinic
+      </h1>
+    </div>
+    <div>
+      <select (change)="handleSetClinic($event)" placeholder="Clinics">
+        <option *ngFor="let clinic of clinics" [value]="clinic.code">
+          {{ clinic.description }}
+        </option>
+      </select>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,76 @@
+<div class="m-1 p-2">
+  <div class="d-flex" style="justify-content: space-evenly;">
+    <div
+      class="flex-column col-md-2 p-0"
+      [ngClass]="{ 'col-md-1': !isPreview && !clinicSchedule, 'col-md-2': isPreview && !clinicSchedule }"
+    >
+      <div *ngIf="!isClinic" class="text-right-date">
+        {{ appointment.appointmentDate | date: 'dd' }}
+      </div>
+      <div *ngIf="!isPreview" class="text-right-date">
+        {{ appointment.appointmentDate | date: 'HH:mm' }}
+      </div>
+      <div *ngIf="!isPreview" class="text-right-date">
+        {{ appointmentEnd | date: 'HH:mm'}}
+      </div>
+      <div *ngIf="isClinic && isAppointment" class="text-right-date">
+        {{ appointmentEnd | date: 'HH:mm' }}
+      </div>
+      <div *ngIf="isPreview" class="text-right-date">
+        {{ appointment.appointmentDate | date: 'hh:mm' }}
+      </div>
+    </div>
+    <div class="col-md-10 border-left">
+      <div class="d-flex flex-row ">
+        <h4>{{ appointment.appointmentDate | date: 'EEEE' }}</h4>
+        <h5 *ngIf="!isPreview" class="badge badge-secondary p-1 badge-margin">
+          {{ appointment.serviceDescription }}
+        </h5>
+        <h5
+          *ngIf="!isPreview"
+          class="badge"
+          [ngClass]="{
+            'badge-success text-success bg-white border border-success p-1 badge-margin':
+              appointment.statusDescription === 'CONFIRMED',
+            'btn btn-outline-danger': appointment.statusDescription === 'UNCONFIRMED' ,
+            'badge-primary': appointment.statusDescription === 'OPEN',
+            'badge-success': appointment.statusDescription === 'COMPLETED',
+            'badge-dark': appointment.statusDescription === 'CANCELLED',
+            'badge-info': appointment.statusDescription === 'MOVED',
+            'badge-warning': appointment.statusDescription === 'Arrived'
+          }"
+        >
+          {{ appointment.statusDescription }}
+        </h5>
+      </div>
+      <div *ngIf="!isClinic">
+        <b *ngIf="appointment?.mediaTypeDescription">
+          Appointment booked by {{ appointment?.mediaTypeDescription }}
+        </b>
+      </div>
+      <div *ngIf="isClinic"><strong>Customer: {{ appointment.customerName }}</strong></div>
+      <div *ngIf="!isClinic">Clinic: {{ appointment.appointmentShopDescription ? appointment.appointmentShopDescription : appointment.customer.shopDescription }}
+        <span style="cursor: pointer;" class="d-inline-block ml-2" (click)="openInfoModal()"
+        ><img
+          src="../../../assets/img/svg/info-icon.svg"
+          style="height: 20px; width: auto;"
+      /></span>
+      </div>
+      <div *ngIf="!isPreview">Clinician: {{ appointment.employeeName }}</div>
+      <label *ngIf="isPreview"
+        >{{
+          appointment?.roomDescription
+        }}</label
+      >
+    </div>
+    <div class="col-1">
+      <fcw-ellipsis-button
+        *ngIf="hasElipsis && !reschedule && menuItems.length"
+        [data]="appointment"
+        [menuItems]="menuItems"
+        (ellipsisPoppedUp)="null"
+        (ellipsisEvent)="doAction($event)"
+      ></fcw-ellipsis-button>
+    </div>
+  </div>
+</div>

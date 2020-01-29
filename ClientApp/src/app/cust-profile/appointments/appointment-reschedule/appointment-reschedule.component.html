@@ -1,0 +1,31 @@
+<div class="d-flex rounded bg-custom">
+  <div class="flex-center-util px-2">
+    <div>{{ appointment.appointmentDate | date: "EE dd" }}</div>
+    <div>{{ appointment.appointmentDate | date: "hh:mm" }}</div>
+  </div>
+  <div class="px-2 blue-border-left">
+    <div>
+      <div class="badge badge-secondary">
+        {{ appointment.serviceDescription }}
+      </div>
+      <div
+        class="badge mt-2 ml-2"
+        [ngClass]="{
+          'badge-success text-success bg-white border border-success p-1 badge-margin':
+            appointment.statusDescription === 'CONFIRMED',
+          'btn btn-outline-danger':
+            appointment.statusDescription === 'UNCONFIRMED',
+          'badge-primary': appointment.statusDescription === 'OPEN',
+          'badge-success': appointment.statusDescription === 'COMPLETED',
+          'badge-dark': appointment.statusDescription === 'CANCELLED',
+          'badge-info': appointment.statusDescription === 'MOVED',
+          'badge-warning': appointment.statusDescription === 'Arrived'
+        }"
+      >
+        {{ appointment.statusDescription }}
+      </div>
+    </div>
+    <div>Clinic: {{ appointment.appointmentShopDescription }}</div>
+    <div>Clinician: {{ appointment.employeeName }}</div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+// TODO: the arrow used points dx ano not down so the rotate logic is complicated. If the arrow pointing down is provided remove this first arrow class / css rule, and in the second maintain only the 180deg rule
+
+svg-icon.arrow svg{
+    transform: rotate(90deg);
+}
+
+svg-icon.rotate svg{
+    // transform: rotate(180deg);
+    transform: rotate(270deg);
+}

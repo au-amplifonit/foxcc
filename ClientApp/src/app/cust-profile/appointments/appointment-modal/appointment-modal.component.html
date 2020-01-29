@@ -1,0 +1,391 @@
+<div class="p-0 h-100">
+  <div class="d-flex flex-column justify-content-space-between h-100">
+    <div>
+      <div class="d-flex flex-column p-4">
+        <div class="m-0 text-right">
+          <button
+            type="button"
+            class="btn-danger btn-sm p-0"
+            (click)="hideModal()"
+          >
+            <svg-icon
+              class="s"
+              src="../../../../assets/img/svg/close-red.svg"
+            ></svg-icon>
+          </button>
+        </div>
+        <div class="text-center">
+          <button
+            *ngIf="clinicalSchedule && !phoneNumber"
+            (click)="openModal2()"
+            class="btn btn-primary col-md-4"
+          >
+            SEARCH
+          </button>
+        </div>
+        <div *ngIf="!clinicalSchedule" class="h3 text-center mt-4">
+          {{ appointmentPayload.customer?.salutationDescription }}
+          {{ appointmentPayload.customer?.firstname }}
+          {{ appointmentPayload.customer?.lastname }}
+        </div>
+        <div *ngIf="!clinicalSchedule" class="text-center">
+          <span class="badge p-2 m-1 badge-secondary">{{
+            appointmentPayload?.appointmentType?.description
+          }}</span>
+          <span
+            class="badge badge-danger text-danger bg-white border border-danger p-2 m-1"
+            >Unconfirmed</span
+          >
+        </div>
+      </div>
+      <div
+        class="modal-body bg-light w-100 d-flex flex-column align-items-left"
+      >
+        <small class="text-center error-text" *ngIf="!appointmentPayload.canBook">{{appointmentPayload.canBookMessage}}</small>
+        <div *ngIf="appointmentForm" class="row">
+          <form class="w-100" [formGroup]="appointmentForm">
+            <fcw-cust-app-list-item
+              class="col-md-12"
+              [isPreview]="true"
+              [appointment]="appointmentPayload"
+              [hasElipsis]="false"
+            ></fcw-cust-app-list-item>
+            <div class="col-md-12 text-center my-3">Customer Notifications</div>
+            <div class="d-flex w-100 justify-content-around">
+              <div class="col-md-2">
+                <label class="toggle">
+                  <input disabled class="toggle__input" type="checkbox" />
+                  <span class="toggle__label">
+                    <span class="toggle__text">SMS</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-md-2">
+                <label class="toggle">
+                  <input disabled class="toggle__input" type="checkbox" />
+                  <span class="toggle__label">
+                    <span class="toggle__text">Email</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group royalblue-border-focus w-100 p-5">
+              <label for="notes">Insert your notes here</label>
+              <textarea
+                class="form-control"
+                formControlName="notes"
+                id="notes"
+                rows="3"
+              ></textarea>
+            </div>
+            <accordion class="w-100" [isAnimated]="true">
+              <accordion-group [isOpen]="contextFlag">
+                <button
+                  class="btn btn-link btn-block clearfix"
+                  accordion-heading
+                  type="button"
+                  (click)="customerContactToggler()"
+                >
+                  <div class="pull-left float-left text-dark">
+                    Customer Contact
+                  </div>
+                  <span class="float-right pull-right"
+                    ><i
+                      [ngClass]="
+                        customerInfosAccordionToggled
+                          ? 'arrow-down-rotation'
+                          : 'arrow-up-rotation'
+                      "
+                      class="fas fa-angle-up fa-2x"
+                    ></i
+                  ></span>
+                </button>
+                <div *ngIf="appointmentForm" formGroupName="customerInfos">
+                  <div class="form-group">
+                    <label for="firstname">
+                      First Name
+                    </label>
+                    <input
+                      class="form-control"
+                      [ngClass]="{
+                        'has-error':
+                          !(customerInfos?.controls)['firstname']?.valid ||
+                          (customerInfos?.controls)['firstname'].value.length <
+                            0
+                      }"
+                      id="firstname"
+                      type="text"
+                      formControlName="firstname"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="lastname">
+                      Last Name
+                    </label>
+                    <input
+                      class="form-control"
+                      [ngClass]="{
+                        'has-error':
+                          !(customerInfos?.controls)['lastname']?.valid ||
+                          (customerInfos?.controls)['lastname'].value.length < 0
+                      }"
+                      id="lastname"
+                      type="text"
+                      formControlName="lastname"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="phoneNumber">
+                      Phone Number
+                    </label>
+                    <input
+                      class="form-control"
+                      [ngClass]="{
+                        'has-error': customerInfos.controls['phoneNumber'].valid === false && !customerInfos.controls['phoneNumber'].disabled
+                      }"
+                      id="phoneNumber"
+                      type="text"
+                      formControlName="phoneNumber"
+                    />
+                    <p
+                      class="error-msg-hint m-0"
+                      *ngIf="customerInfos.controls['phoneNumber'].valid === false && !customerInfos.controls['phoneNumber'].disabled"
+                    >
+                      *Must begin with 0 and have a length of 10 numeric
+                      characters
+                    </p>
+                  </div>
+                  <div class="form-group">
+                    <label for="birthday">
+                      Date of Birth
+                    </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="birthday"
+                      bsDatepicker
+                      formControlName="birthday"
+                      [maxDate]="maxDate"
+                      [bsConfig]="{
+                        dateInputFormat: 'DD-MM-YYYY',
+                        containerClass: 'theme-default',
+                        adaptivePosition: true
+                      }"
+                      placement="right"
+                      [ngClass]="{
+                        'has-error':
+                          !(customerInfos?.controls)['birthday']?.valid &&
+                          !(customerInfos?.controls)['birthday']?.value
+                      }"
+                    />
+                  </div>
+                </div>
+              </accordion-group>
+              <accordion-group [isOpen]="contextFlag">
+                <button
+                  class="btn btn-link btn-block clearfix"
+                  accordion-heading
+                  type="button"
+                  (click)="customerAddressToggler()"
+                >
+                  <div class="pull-left float-left text-dark">
+                    Customer Address
+                  </div>
+                  <span class="float-right pull-right"
+                    ><i
+                      [ngClass]="
+                        customerAddressAccordionToggled
+                          ? 'arrow-down-rotation'
+                          : 'arrow-up-rotation'
+                      "
+                      class="fas fa-angle-up fa-2x"
+                    ></i
+                  ></span>
+                </button>
+                <div formGroupName="customerAddress">
+                  <div class="form-group">
+                    <label for="addressLine1">
+                      <div class="d-flex align-items-center">
+                        <span class="titleFieldCard">Address Line 1:</span>
+                        <div *ngIf="typeaheadLoading">
+                          <img
+                            src="./../../../assets/img/svg/spinner-autocomplete.svg"
+                            style="width:20px; height: 20px;"
+                          /><span>Loading</span>
+                        </div>
+                      </div>
+                    </label>
+                    <!-- <input
+                      class="form-control"
+                      maxlength="100"
+                      
+                      id="addressLine1"
+                      type="text"
+                      formControlName="addressLine1"
+                    /> -->
+                    <input
+                      formControlName="addressLine1"
+                      [typeaheadAsync]="true"
+                      typeaheadWaitMs="1000"
+                      [typeaheadMinLength]="3"
+                      [typeahead]="dataSource"
+                      [isAnimated]="true"
+                      (typeaheadLoading)="changeTypeaheadLoading($event)"
+                      (typeaheadOnSelect)="typeaheadOnSelect($event)"
+                      typeaheadOptionField="description"
+                      placeholder="Type for addresses"
+                      class="form-control"
+                      [ngClass]="{
+                        'has-error': !(customerAddress?.controls)[
+                          'addressLine1'
+                        ]?.valid
+                      }"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="addressLine1">
+                      Address Line2
+                    </label>
+                    <input
+                      class="form-control"
+                      [ngClass]="{
+                        'has-error': !(customerAddress?.controls)[
+                          'addressLine2'
+                        ]?.valid
+                      }"
+                      maxlength="100"
+                      id="addressLine2"
+                      type="text"
+                      formControlName="addressLine2"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="stateCode">
+                      State
+                    </label>
+                    <input
+                      class="form-control"
+                      disabled
+                      maxlength="3"
+                      [ngClass]="{
+                        'has-error': !(customerAddress?.controls)['stateCode']
+                          ?.valid!
+                      }"
+                      id="stateCode"
+                      type="text"
+                      formControlName="stateCode"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="city">
+                      City
+                    </label>
+                    <input
+                      disabled
+                      class="form-control"
+                      maxlength="50"
+                      [ngClass]="{
+                        'has-error': !(customerAddress?.controls)['city']?.valid
+                      }"
+                      id="city"
+                      type="text"
+                      formControlName="city"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="zipCode">
+                      Post Code
+                      <!-- {{ !(customerAddress?.controls)["zipCode"]?.valid }} -->
+                    </label>
+                    <input
+                      class="form-control"
+                      maxlength="4"
+                      [ngClass]="{
+                        'has-error': !(customerAddress?.controls)['zipCode']
+                          ?.valid
+                      }"
+                      id="zipCode"
+                      type="text"
+                      formControlName="zipCode"
+                    />
+                  </div>
+                </div>
+              </accordion-group>
+            </accordion>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div
+      class="d-flex align-items-center justify-content-around p-4 sticky-bot"
+      [ngClass]="{
+        'justify-content-around': appointmentPayload.canBook,
+        'justify-content-center': !appointmentPayload.canBook
+      }"
+    >
+      <button
+        [disabled]="
+          typeaheadLoading ||
+          (customerAddress?.controls)['addressLine1'].value.length < 3
+        "
+        (click)="bsModalRef.hide()"
+        class="btn btn-outline-secondary col-md-4"
+      >
+        CANCEL
+      </button>
+      <!-- <button
+        *ngIf="appointmentPayload.canBook && !clinicalSchedule"
+        [disabled]="!appointmentForm.valid || disabled"
+        (click)="handleSaveAppointment()"
+        class="btn btn-primary col-md-4"
+      >
+        SAVE
+      </button> -->
+      <div
+        class="btn-group col-md-5"
+       *ngIf="appointmentPayload.canBook"
+        dropdown
+        [ngClass]="{
+          disabled:
+            !appointmentForm.valid ||
+            disabled ||
+            typeaheadLoading ||
+            (customerAddress?.controls)['addressLine1'].value.length < 3
+        }"
+      >
+        <button
+          
+          [disabled]="!appointmentForm.valid || !appointmentPayload.canBook"
+          (click)="handleSaveAppointment()"
+          class="btn btn-primary"
+        >
+          SAVE
+        </button>
+        <button
+          
+          id="button-split"
+          dropdownToggle
+          class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+          aria-controls="dropdown-split"
+        >
+          <span class="caret"></span>
+        </button>
+        <ul
+          id="dropdown-split"
+          *dropdownMenu
+          class="dropdown-menu"
+          role="menu"
+          aria-labelledby="button-split"
+        >
+          <li role="menuitem">
+            <a
+              class="dropdown_item-wb mt-2 p-1"
+              (click)="handleSaveAppointment(false)"
+              >Save And New</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

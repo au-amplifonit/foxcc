@@ -1,0 +1,58 @@
+.tab-container {
+  display: inherit;
+}
+
+div.main-header {
+  height: 3.5rem;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.main-title {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.navbar-brand{
+  background: white;
+  margin-right: 0;
+  border-right: 1px solid lightgray;
+  li{
+    // for layout consistency, a border is always present. if active it turns red
+    border-right: 4px solid white;
+    border-bottom: 1px solid lightgray;
+    min-height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    outline: unset;
+    cursor: pointer;
+    .row{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      .col-sm-2{
+        display: flex;
+        align-items: flex-start;
+      }
+    }
+  }
+
+  .active{
+    border-right: 4px solid #c5003e;
+    background: #f8f9fa;
+    div:first-of-type{
+      color: #c5003e !important;
+    }
+  }
+}
+
+div{
+  white-space: normal;
+}
+
+
+.col-sm-11.main-title {
+    margin-left: 55px;
+}

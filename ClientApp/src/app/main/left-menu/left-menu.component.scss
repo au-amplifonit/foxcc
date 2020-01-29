@@ -1,0 +1,15 @@
+.sideMenu {
+  position: fixed;
+  min-height: calc(100vh);
+  z-index: 3000;
+  transition: all 0.5s ease-in-out;
+  background-color: white;
+}
+
+.left-menu-open {
+  left: 0;
+}
+
+.left-menu-hide {
+  left: -22vw;
+}

@@ -1,0 +1,1806 @@
+<div class="d-flex" style="margin-top: 5px">
+  <div class="col-sm-4 col-md-5 ml-custom-1">
+    <div class="text-custom">Account Details</div>
+  </div>
+  <div class="col-sm-4 col-md-5 d-flex justify-content-end ml-custom-2">
+    <button
+      [routerLink]="['/main/custProfile/acc-det']"
+      *ngIf="!isNewForm && !xid"
+      class="btn btn-outline-primary"
+      (click)="clearCustomer()"
+    >
+      New Customer
+    </button>
+    <button
+      [routerLink]="['/main/custProfile/appointments/newAppointment']"
+      [queryParams]="{ customerId: customerId }"
+      *ngIf="!isNewForm && !xid"
+      class="btn ml-3 btn-outline-primary"
+    >
+      New Appointment
+    </button>
+    <button
+      *ngIf="isNewForm || xid"
+      class="btn btn-outline-primary col-sm-4 col-md-5"
+      [disabled]="
+        !cardCustomerContactForm?.valid ||
+        !cardCustomerAccountForm?.valid ||
+        !cardCustomerAddressForm?.valid ||
+        !cardCustomerIdentityForm?.valid ||
+        (this.cardCustomerAddressForm?.controls)['addressType']?.disabled ||
+        isSaving
+      "
+      (click)="saveForm()"
+    >
+      Save
+    </button>
+  </div>
+</div>
+<!--      <span *ngIf="data$|async as customer">-->
+<div *ngIf="customer" class="">
+  <div class="d-flex flex-row">
+    <!--------------------------------CONTACT------------------------------------------------------------------------->
+    <div class="col-sm-4 col-md-5 mx-5">
+      <fcw-card
+        class="m-3 p-3 flex-fill"
+        [dataMenu]="dataMenuContact"
+        [card]="'contact'"
+        [isOtherContactPreferred]="!customer?.isOtherContactPreferred"
+        [showButton]="!isNewForm && !inEditing && !xid"
+        (eventFromCard)="
+          toggleEnable(
+            $event,
+            dataMenuContact[0].eventName,
+            cardCustomerContactForm,
+            'isHiddenContact'
+          )
+        "
+        [footerHidden]="!switcher.isHiddenContact && customerIdBool"
+      >
+        <fcw-header-with-badge
+          head
+          [isNewForm]="isNewForm"
+          [card]="'contact'"
+          [contactPreferredIsOtherOne]="customer?.isOtherContactPreferred"
+          [title]="'Customer Contact'"
+        >
+        </fcw-header-with-badge>
+        <div body>
+          <ngx-spinner
+            bdColor="rgba(255,255,255,0.8)"
+            color="#c5003e"
+            name="contact"
+            [fullScreen]="false"
+            type="ball-spin-clockwise"
+            size="medium"
+          ></ngx-spinner>
+          <form
+            class="form-group p-0 m-0"
+            [formGroup]="cardCustomerContactForm"
+            *ngIf="cardCustomerContactForm"
+            (ngSubmit)="onSubmitContact()"
+          >
+            <div
+              *ngIf="
+                (cardCustomerContactForm?.controls)['firstname'] &&
+                (cardCustomerContactForm?.controls)['lastname']
+              "
+              class="d-flex mr-1 my-1"
+            >
+              <div class="col-sm-6 mr-form">
+                <label class="fullWidth" for="customerFirstName">
+                  <span class="titleFieldCard">First Name</span>
+                  <input
+                    *ngIf="!switcher.isHiddenContact"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerContactForm?.controls)[
+                        'firstname'
+                      ]?.valid
+                    }"
+                    class="form-control lead mb-0"
+                    formControlName="firstname"
+                    id="customerFirstName"
+                    name="customerFirstName"
+                    type="text"
+                  />
+                  <p *ngIf="switcher.isHiddenContact" class="lead mb-0 black">
+                    {{ customer?.addresses ? customer?.firstname : "" }}
+                  </p>
+                </label>
+                <!-- <span *ngIf="cardCustomerContactForm.controls['firstname'].hasError('required') && cardCustomerContactForm.controls['firstname'].touched">This field is required</span> -->
+              </div>
+              <div class="col-sm-6" style="padding: unset">
+                <label class="fullWidth" for="customerLastName">
+                  <span class="titleFieldCard">Last Name</span>
+                  <input
+                    *ngIf="!switcher.isHiddenContact"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerContactForm?.controls)[
+                        'lastname'
+                      ]?.valid
+                    }"
+                    class="form-control lead mb-0"
+                    formControlName="lastname"
+                    id="customerLastName"
+                    name="customerLastName"
+                  />
+                  <p *ngIf="switcher.isHiddenContact" class="lead black">
+                    {{ customer?.lastname }}
+                  </p>
+                  <!-- <fcw-badge-generic
+                    *ngIf="isPreferred(customerIndex)"
+                    [text]="'Primary'"
+                    [type]="'warning'"
+                  ></fcw-badge-generic> -->
+                </label>
+              </div>
+            </div>
+
+            <div class="d-flex mr-1 my-1">
+              <div
+                *ngIf="(cardCustomerContactForm?.controls)['middleName']"
+                class="col-sm-6 mr-form"
+              >
+                <label class="fullWidth" for="customerMiddleName">
+                  <span class="titleFieldCard">Middle Name</span>
+                  <input
+                    *ngIf="!switcher.isHiddenContact"
+                    class="form-control lead mb-0"
+                    formControlName="middleName"
+                    id="customerMiddleName"
+                    name="customerMiddleName"
+                    type="text"
+                  />
+                  <p
+                    *ngIf="switcher.isHiddenContact && customer?.middleName"
+                    class="lead mb-0 black"
+                  >
+                    {{ customer?.middleName }}
+                  </p>
+                </label>
+                <!-- <span *ngIf="cardCustomerContactForm.controls['firstname'].hasError('required') && cardCustomerContactForm.controls['firstname'].touched">This field is required</span> -->
+              </div>
+              <div
+                *ngIf="(cardCustomerContactForm?.controls)['preferredName']"
+                class="col-sm-6"
+                style="padding: unset"
+              >
+                <label
+                  class="fullWidth"
+                  for="prefName"
+                  *ngIf="!switcher.isHiddenContact"
+                >
+                  <span class="titleFieldCard">Preferred Name</span>
+                  <!--*ngIf="(customer?.preferredName !== nullChar) && !switcher.isHiddenContact || (!customerIdBool && !switcher.isHiddenContact)"-->
+                  <input
+                    class="form-control lead mb-0"
+                    formControlName="preferredName"
+                    id="prefName"
+                    name="prefName"
+                    type="text"
+                    [value]="
+                      customer?.preferredName ? customer?.preferredName : ''
+                    "
+                  />
+                </label>
+                <label
+                  class="mb-0"
+                  for="prefNameP"
+                  *ngIf="switcher.isHiddenContact"
+                >
+                  <span class="titleFieldCard">Preferred Name</span>
+                </label>
+                <p
+                  id="prefNameP"
+                  *ngIf="switcher.isHiddenContact"
+                  class="lead mb-0 black"
+                >
+                  {{ customer?.preferredName }}
+                </p>
+                <!--*ngIf="(customer?.preferredName === nullChar) && !switcher.isHiddenContact"-->
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <div
+                *ngIf="(cardCustomerContactForm?.controls)['customerEmail']"
+                class="col-sm-12"
+                style="padding: unset"
+              >
+                <span class="flex-row">
+                  <span class="mr-3">
+                    <label class="fullWidth" for="customerEmail">
+                      <span class="titleFieldCard">Email</span>
+                      <fcw-badge-generic
+                        *ngIf="
+                          (cardCustomerContactForm?.controls)[
+                            'preferredContactMethod'
+                          ]?.value == 2 && switcher?.isHiddenContact
+                        "
+                        class="ml-2"
+                        [type]="'success'"
+                        [text]="'Preferred'"
+                      ></fcw-badge-generic>
+                      <input
+                        *ngIf="!switcher.isHiddenContact"
+                        [ngClass]="{
+                          'has-error': !(cardCustomerContactForm?.controls)[
+                            'customerEmail'
+                          ]?.valid
+                        }"
+                        class="form-control lead mb-0"
+                        formControlName="customerEmail"
+                        id="customerEmail"
+                        name="customerEmail"
+                        type="email"
+                      />
+                      <p *ngIf="switcher.isHiddenContact" class="lead black">
+                        {{
+                          customer?.addresses
+                            ? (customer?.addresses)[customerIndex]?.eMail
+                            : ""
+                        }}
+                      </p>
+                    </label>
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <form
+              class="col-sm-12 p-0"
+              *ngIf="cardCustomerContactForm?.get('customerPhone')"
+              [formGroup]="cardCustomerContactForm?.get('customerPhone')"
+            >
+              <div class="d-flex mr-1 my-1">
+                <div class="col-sm-6 mr-form">
+                  <span class="mr-3">
+                    <label class="fullWidth" for="customerMobile">
+                      <span class="titleFieldCard">Mobile Phone</span>
+                      <fcw-badge-generic
+                        *ngIf="
+                          (cardCustomerContactForm?.controls)[
+                            'preferredContactMethod'
+                          ]?.value == 0 && switcher?.isHiddenContact
+                        "
+                        class="ml-2"
+                        [type]="'success'"
+                        [text]="'Preferred'"
+                      ></fcw-badge-generic>
+                      <input
+                        maxlength="10"
+                        *ngIf="!switcher.isHiddenContact"
+                        class="form-control lead mb-0"
+                        [ngClass]="{
+                          'has-error':
+                            !(cardCustomerContactForm?.controls)[
+                              'customerPhone'
+                            ]?.valid &&
+                            !(customerPhoneGroup?.controls)['customerMobile']
+                              .valid
+                        }"
+                        formControlName="customerMobile"
+                        id="customerMobile"
+                        name="customerMobile"
+                        type="phone"
+                      />
+                      <p *ngIf="switcher?.isHiddenContact" class="lead black">
+                        {{
+                          customer?.addresses
+                            ? (customer?.addresses)[customerIndex]["mobile"]
+                            : ""
+                        }}
+                      </p>
+                    </label>
+                  </span>
+                  <p
+                    class="error-msg-hint m-0"
+                    *ngIf="
+                      (customerPhoneGroup?.controls)['customerMobile']?.errors
+                        ?.customerMobileInvalid &&
+                      !(customerPhoneGroup?.controls)['customerMobile']?.errors
+                        ?.atLeastOnePhoneValid
+                    "
+                  >
+                    *Must begin with 04 and have a length of 10 numeric
+                    characters
+                  </p>
+                  <p
+                    class="error-msg-hint m-0"
+                    *ngIf="
+                      (customerPhoneGroup?.controls)['customerMobile']?.errors
+                        ?.atLeastOnePhoneValid
+                    "
+                  >
+                    *Must insert at least one valid phone
+                  </p>
+                </div>
+                <div class="col-sm-6" style="padding: unset">
+                  <span class="mr-3">
+                    <label class="fullWidth" for="customerHomePhone">
+                      <span class="titleFieldCard">Home Phone</span>
+                      <fcw-badge-generic
+                        *ngIf="
+                          (cardCustomerContactForm?.controls)[
+                            'preferredContactMethod'
+                          ]?.value == 1 && switcher.isHiddenContact
+                        "
+                        class="ml-2"
+                        [type]="'success'"
+                        [text]="'Preferred'"
+                      ></fcw-badge-generic>
+                      <input
+                        maxlength="10"
+                        *ngIf="!switcher.isHiddenContact"
+                        class="form-control lead mb-0"
+                        formControlName="customerHomePhone"
+                        id="customerHomePhone"
+                        name="customerHomePhone"
+                        type="phone"
+                        [ngClass]="{
+                          'has-error':
+                            !(cardCustomerContactForm?.controls)[
+                              'customerPhone'
+                            ]?.valid &&
+                            !(customerPhoneGroup?.controls)['customerHomePhone']
+                              .valid
+                        }"
+                      />
+                      <p *ngIf="switcher.isHiddenContact" class="lead black">
+                        {{
+                          customer?.addresses
+                            ? (customer?.addresses)[customerIndex]["phones"][0]
+                            : ""
+                        }}
+                      </p>
+                    </label>
+                  </span>
+                  <p
+                    class="error-msg-hint m-0"
+                    *ngIf="
+                      (customerPhoneGroup?.controls)['customerHomePhone']
+                        ?.errors?.customerHomePhoneInvalid &&
+                      !(customerPhoneGroup?.controls)['customerHomePhone']
+                        ?.errors?.atLeastOnePhoneValid
+                    "
+                  >
+                    *Must begin with 0 and have a length of 10 numeric
+                    characters
+                  </p>
+                  <p
+                    class="error-msg-hint m-0"
+                    *ngIf="
+                      (customerPhoneGroup?.controls)['customerHomePhone']
+                        ?.errors?.atLeastOnePhoneValid
+                    "
+                  >
+                    *Must insert at least one valid phone
+                  </p>
+                </div>
+              </div>
+
+              <div class="d-flex mr-1 my-1">
+                <div class="col-sm-6 mr-form">
+                  <span class="flex-row">
+                    <span class="mr-3">
+                      <label class="fullWidth" for="customerWorkPhone">
+                        <span class="titleFieldCard">Work Phone</span>
+                        <input
+                          *ngIf="!switcher.isHiddenContact"
+                          maxlength="10"
+                          class="form-control lead mb-0"
+                          formControlName="customerWorkPhone"
+                          id="customerWorkPhone"
+                          name="customerWorkPhone"
+                          type="phone"
+                          [ngClass]="{
+                            'has-error':
+                              !(cardCustomerContactForm?.controls)[
+                                'customerPhone'
+                              ]?.valid &&
+                              !(customerPhoneGroup?.controls)[
+                                'customerWorkPhone'
+                              ]?.valid
+                          }"
+                        />
+                        <p *ngIf="switcher.isHiddenContact" class="lead black">
+                          {{
+                            customer?.addresses
+                              ? (customer?.addresses)[customerIndex][
+                                  "phones"
+                                ][1]
+                              : ""
+                          }}
+                        </p>
+                      </label>
+                    </span>
+                    <p
+                      class="error-msg-hint m-0"
+                      *ngIf="
+                        (customerPhoneGroup?.controls)['customerWorkPhone']
+                          ?.errors?.customerWorkPhoneInvalid &&
+                        !(customerPhoneGroup?.controls)['customerWorkPhone']
+                          ?.errors?.atLeastOnePhoneValid
+                      "
+                    >
+                      *Must have a length of 10 numeric characters
+                    </p>
+                    <p
+                      class="error-msg-hint m-0"
+                      *ngIf="
+                        (customerPhoneGroup?.controls)['customerWorkPhone']
+                          ?.errors?.atLeastOnePhoneValid
+                      "
+                    >
+                      *Must insert at least one valid phone
+                    </p>
+                  </span>
+                </div>
+                <div class="col-sm-6" style="padding: unset">
+                  <span class="mr-3">
+                    <label class="fullWidth" for="customerOtherPhone">
+                      <span class="titleFieldCard">Other Phone</span>
+                      <input
+                        *ngIf="!switcher.isHiddenContact"
+                        maxlength="10"
+                        class="form-control lead mb-0"
+                        formControlName="customerOtherPhone"
+                        id="customerOtherPhone"
+                        name="customerOtherPhone"
+                        type="phone"
+                        [ngClass]="{
+                          'has-error':
+                            !(cardCustomerContactForm?.controls)[
+                              'customerPhone'
+                            ]?.valid &&
+                            !(customerPhoneGroup?.controls)[
+                              'customerOtherPhone'
+                            ]?.valid
+                        }"
+                      />
+                      <p *ngIf="switcher.isHiddenContact" class="lead black">
+                        {{
+                          customer?.addresses
+                            ? (customer?.addresses)[customerIndex]["phones"][2]
+                            : ""
+                        }}
+                      </p>
+                    </label>
+                  </span>
+                  <p
+                    class="error-msg-hint m-0"
+                    *ngIf="
+                      (customerPhoneGroup?.controls)['customerOtherPhone']
+                        ?.errors?.customerOtherPhoneInvalid &&
+                      !(customerPhoneGroup?.controls)['customerOtherPhone']
+                        ?.errors?.atLeastOnePhoneValid
+                    "
+                  >
+                    *Must have a length of 10 numeric characters
+                  </p>
+                  <p
+                    class="error-msg-hint m-0"
+                    *ngIf="
+                      (customerPhoneGroup?.controls)['customerOtherPhone']
+                        ?.errors?.atLeastOnePhoneValid
+                    "
+                  >
+                    *Must insert at least one valid phone
+                  </p>
+                </div>
+              </div>
+            </form>
+
+            <div
+              *ngIf="
+                preferredTimesOfContact &&
+                (cardCustomerContactForm?.controls)['prefTOC']
+              "
+              class="d-flex"
+            >
+              <span class="col-sm-12" style="padding: unset">
+                <span class="mr-3">
+                  <label class="fullWidth" for="pToc">
+                    <span class="titleFieldCard"
+                      >Preferred time of contact</span
+                    >
+                    <select
+                      class="form-control"
+                      formControlName="prefTOC"
+                      [disabled]="!isNewForm || !inEditing"
+                      [ngClass]="{
+                        'has-error':
+                          cardCustomerContactForm.controls['prefTOC'].errors
+                            ?.required
+                      }"
+                    >
+                      <option
+                        *ngFor="let tocItem of preferredTimesOfContact"
+                        [selected]="
+                          customer?.preferredTimeOfContactCode! !== nullChar
+                            ? tocItem.value ===
+                              customer?.preferredTimeOfContactCode
+                            : tocItem.value === '02'
+                        "
+                        [value]="tocItem.value"
+                      >
+                        {{ tocItem.description }}
+                      </option>
+                    </select>
+                  </label>
+                </span>
+              </span>
+            </div>
+
+            <div
+              *ngIf="
+                isNewForm || (inEditing && !switcher.isHiddenContact) || xid
+              "
+              class="d-flex"
+            >
+              <span
+                *ngIf="
+                  (cardCustomerContactForm?.controls)['preferredContactMethod']
+                "
+                class="col-sm-12 mb-2"
+                style="padding: unset"
+              >
+                <span class="form-group">
+                  <label class="radio-form-positioning" for="pToc">
+                    <span class="titleFieldCard"
+                      >Preferred Type of contact</span
+                    >
+                    <div (click)="handleRadioChanges($event)">
+                      <label class="radio-form-container">
+                        <input
+                          type="radio"
+                          value="0"
+                          [checked]="
+                            (cardCustomerContactForm?.controls)[
+                              'preferredContactMethod'
+                            ]
+                              ? (cardCustomerContactForm?.controls)[
+                                  'preferredContactMethod'
+                                ].value == 0
+                              : null
+                          "
+                          formControlName="preferredContactMethod"
+                        />
+                        <span class="radio-span-text">Mobile Phone</span>
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="1"
+                          [checked]="
+                            (cardCustomerContactForm?.controls)[
+                              'preferredContactMethod'
+                            ]
+                              ? (cardCustomerContactForm?.controls)[
+                                  'preferredContactMethod'
+                                ].value == 1
+                              : null
+                          "
+                          formControlName="preferredContactMethod"
+                        />
+                        <span class="radio-span-text">Home Phone</span>
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="2"
+                          [checked]="
+                            (cardCustomerContactForm?.controls)[
+                              'preferredContactMethod'
+                            ]
+                              ? (cardCustomerContactForm?.controls)[
+                                  'preferredContactMethod'
+                                ].value == 2
+                              : null
+                          "
+                          formControlName="preferredContactMethod"
+                        />
+                        <span class="radio-span-text">Email</span>
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="3"
+                          [checked]="
+                            (cardCustomerContactForm?.controls)[
+                              'preferredContactMethod'
+                            ]
+                              ? (cardCustomerContactForm?.controls)[
+                                  'preferredContactMethod'
+                                ].value == 3
+                              : null
+                          "
+                          formControlName="preferredContactMethod"
+                        />
+                        <span class="radio-span-text">Any</span>
+                      </label>
+                    </div>
+                  </label>
+                </span>
+              </span>
+            </div>
+          </form>
+        </div>
+        <span
+          *ngIf="!switcher.isHiddenContact && customerIdBool"
+          class="flex-row"
+          foot
+        >
+          <button
+            class="btn  flex-fill btn-outline-secondary p-1 mx-1"
+            (click)="onCancel(cardCustomerContactForm, 'isHiddenContact')"
+          >
+            cancel
+          </button>
+          <button
+            class="btn  flex-fill btn-primary p-1 mx-1"
+            [disabled]="!cardCustomerContactForm?.valid"
+            (click)="saveForm('contact')"
+            type="submit"
+          >
+            Confirm
+          </button>
+        </span>
+      </fcw-card>
+      <!--------------------------------Other Contact------------------------------------------------------------------------->
+      <fcw-card
+        class="m-3 p-3"
+        [dataMenu]="dataMenuOtherContact"
+        [card]="'otherContact'"
+        [isOtherContactPreferred]="customer?.isOtherContactPreferred"
+        [showButton]="!isNewForm && !inEditing && !xid"
+        (eventFromCard)="
+          toggleEnable(
+            $event,
+            dataMenuOtherContact[0].eventName,
+            cardCustomerOtherContactForm,
+            'isHiddenOtherContact'
+          )
+        "
+        [footerHidden]="!switcher.isHiddenOtherContact && customerIdBool"
+      >
+        <fcw-header-with-badge
+          head
+          [title]="'Alternate Contact'"
+          [card]="'otherContact'"
+          [contactPreferredIsOtherOne]="customer?.isOtherContactPreferred"
+          [isNewForm]="isNewForm"
+        ></fcw-header-with-badge>
+        <div body>
+          <ngx-spinner
+            bdColor="rgba(255,255,255,0.8)"
+            color="#c5003e"
+            name="otherContact"
+            [fullScreen]="false"
+            type="ball-spin-clockwise"
+            size="medium"
+          ></ngx-spinner>
+          <form
+            class="form-group p-0 m-0"
+            [formGroup]="cardCustomerOtherContactForm"
+            *ngIf="
+              cardCustomerOtherContactForm.controls['otherContact_Firstname']
+            "
+            (ngSubmit)="onSubmitContact()"
+          >
+            <div
+              *ngIf="isNewForm || xid"
+              class="d-flex justify-content-space-between"
+            >
+              <p>Alternate Contact</p>
+              <ui-switch
+                [checked]="isSwitchChecked"
+                (change)="setOtherContactValidators($event)"
+              ></ui-switch>
+            </div>
+
+            <div
+              *ngIf="
+                (inEditing && !switcher.isHiddenOtherContact) ||
+                (contactPreferredIsOtherOne && isNewForm)
+              "
+              class="d-flex"
+            >
+              <div class="col-sm-12 d-flex" style="padding: unset">
+                <div class="form-check">
+                  <input
+                    (click)="setAreaValidation()"
+                    class="form-check-input"
+                    type="radio"
+                    name="isOtherContactPreferred"
+                    id="primaryContact"
+                    [value]="true"
+                    formControlName="isOtherContactPreferred"
+                  />
+                  <label class="form-check-label" for="primaryContact">
+                    Primary
+                  </label>
+                </div>
+                <div class="form-check ml-2">
+                  <input
+                    (click)="setAreaValidation()"
+                    class="form-check-input"
+                    type="radio"
+                    name="isOtherContactPreferred"
+                    id="alternateContact"
+                    [value]="false"
+                    formControlName="isOtherContactPreferred"
+                  />
+                  <label class="form-check-label" for="alternateContact">
+                    Alternate
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex mr-1 my-1">
+              <div class="col-sm-6 mr-form">
+                <label class="fullWidth" for="otherContact_Firstname">
+                  <span class="titleFieldCard">First Name</span>
+                  <input
+                    *ngIf="!switcher?.isHiddenOtherContact"
+                    [attr.disabled]="!contactPreferredIsOtherOne ? true : null"
+                    [ngClass]="{
+                      'has-error': !cardCustomerOtherContactForm.controls[
+                        'otherContact_Firstname'
+                      ]?.valid
+                    }"
+                    class="form-control lead mb-0"
+                    formControlName="otherContact_Firstname"
+                    id="otherContact_Firstname"
+                    name="otherContact_Firstname"
+                    type="text"
+                  />
+                  <p *ngIf="switcher?.isHiddenOtherContact" class="lead black">
+                    {{ customer?.otherContact_Firstname }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-sm-6" style="padding: unset">
+                <label class="fullWidth" for="otherContact_Lastname">
+                  <span class="titleFieldCard">Last Name</span>
+                  <input
+                    *ngIf="!switcher?.isHiddenOtherContact"
+                    [attr.disabled]="!contactPreferredIsOtherOne ? true : null"
+                    [ngClass]="{
+                      'has-error':
+                        cardCustomerOtherContactForm.controls[
+                          'otherContact_Lastname'
+                        ]?.errors?.required
+                    }"
+                    class="form-control lead mb-0"
+                    formControlName="otherContact_Lastname"
+                    id="otherContact_Lastname"
+                    name="otherContact_Lastname"
+                    type="text"
+                  />
+                  <p *ngIf="switcher?.isHiddenOtherContact" class="lead black">
+                    {{ customer?.otherContact_Lastname }}
+                  </p>
+                </label>
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <div class="col-sm-12" style="padding: unset">
+                <span class="flex-row">
+                  <span class="mr-3">
+                    <label class="fullWidth" for="otherContact_eMail">
+                      <span class="titleFieldCard">Email</span>
+
+                      <input
+                        *ngIf="!switcher?.isHiddenOtherContact"
+                        class="form-control lead mb-0"
+                        [ngClass]="{
+                          'has-error': !(cardCustomerOtherContactForm
+                            ?.controls)['otherContact_eMail']?.valid
+                        }"
+                        [attr.disabled]="
+                          !contactPreferredIsOtherOne ? true : null
+                        "
+                        formControlName="otherContact_eMail"
+                        id="otherContact_eMail"
+                        name="otherContact_eMail"
+                        type="email"
+                      />
+                      <p
+                        *ngIf="switcher?.isHiddenOtherContact"
+                        class="lead black"
+                      >
+                        {{
+                          customer?.addresses &&
+                          (customer?.addresses)[this.otherContactIndex] &&
+                          otherContactIndex !== 0
+                            ? (customer?.addresses)[this.otherContactIndex][
+                                "eMail"
+                              ]
+                            : (cardCustomerOtherContactForm?.controls)[
+                                "otherContact_eMail"
+                              ]?.value
+                        }}
+                      </p>
+                    </label>
+                  </span>
+                </span>
+                <p
+                  class="error-msg-hint m-0"
+                  *ngIf="
+                    !switcher?.isHiddenOtherContact &&
+                    (cardCustomerOtherContactForm?.controls)[
+                      'otherContact_eMail'
+                    ]?.errors?.invalidEmail &&
+                    !(cardCustomerOtherContactForm?.controls)[
+                      'otherContact_eMail'
+                    ]?.errors?.atLeastOneFieldValid
+                  "
+                >
+                  *Email is Invalid
+                </p>
+                <p
+                  class="error-msg-hint m-0"
+                  *ngIf="
+                    !switcher?.isHiddenOtherContact &&
+                    (cardCustomerOtherContactForm?.controls)[
+                      'otherContact_eMail'
+                    ]?.errors?.atLeastOneFieldValid
+                  "
+                >
+                  *Must insert at least one valid field
+                </p>
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <div class="col-sm-6 mr-form">
+                <span class="mr-3">
+                  <label class="fullWidth" for="otherContact_mobile">
+                    <div class="d-flex">
+                      <span class="titleFieldCard">Mobile Phone</span>
+                    </div>
+                    <input
+                      maxlength="10"
+                      *ngIf="!switcher?.isHiddenOtherContact"
+                      [ngClass]="{
+                        'has-error': !(cardCustomerOtherContactForm?.controls)[
+                          'otherContact_mobile'
+                        ]?.valid
+                      }"
+                      class="form-control lead mb-0"
+                      [attr.disabled]="
+                        !contactPreferredIsOtherOne ? true : null
+                      "
+                      formControlName="otherContact_mobile"
+                      id="otherContact_mobile"
+                      name="otherContact_mobile"
+                      type="phone"
+                    />
+                    <p
+                      *ngIf="switcher?.isHiddenOtherContact"
+                      class="lead black"
+                    >
+                      {{
+                        customer?.addresses &&
+                        (customer?.addresses)[otherContactIndex] &&
+                        otherContactIndex !== 0
+                          ? (customer?.addresses)[otherContactIndex]["mobile"]
+                          : (cardCustomerOtherContactForm?.controls)[
+                              "otherContact_mobile"
+                            ]?.value
+                      }}
+                    </p>
+                  </label>
+                </span>
+                <p
+                  class="error-msg-hint m-0"
+                  *ngIf="
+                    !switcher?.isHiddenOtherContact &&
+                    (cardCustomerOtherContactForm?.controls)[
+                      'otherContact_mobile'
+                    ]?.errors?.invalidMobile &&
+                    !(cardCustomerOtherContactForm?.controls)[
+                      'otherContact_mobile'
+                    ]?.errors?.atLeastOneFieldValid
+                  "
+                >
+                  *Must begin with 04 and have a length of 10 numeric characters
+                </p>
+                <p
+                  class="error-msg-hint m-0"
+                  *ngIf="
+                    !switcher?.isHiddenOtherContact &&
+                    (cardCustomerOtherContactForm?.controls)[
+                      'otherContact_mobile'
+                    ]?.errors?.atLeastOneFieldValid
+                  "
+                >
+                  *Must insert at least one valid field
+                </p>
+              </div>
+              <div class="col-sm-6" style="padding: unset">
+                <span class="flex-row">
+                  <span class="mr-3">
+                    <label class="fullWidth" for="otherContact_workHomePhone">
+                      <span class="titleFieldCard">Work/Home Phone</span>
+
+                      <input
+                        maxlength="10"
+                        *ngIf="!switcher?.isHiddenOtherContact"
+                        [ngClass]="{
+                          'has-error': !(cardCustomerOtherContactForm
+                            ?.controls)['otherContact_workHomePhone']?.valid
+                        }"
+                        class="form-control lead mb-0"
+                        [attr.disabled]="
+                          !contactPreferredIsOtherOne ? true : null
+                        "
+                        formControlName="otherContact_workHomePhone"
+                        id="otherContact_workHomePhone"
+                        name="otherContact_workHomePhone"
+                        type="phone"
+                      />
+                      <p
+                        *ngIf="switcher?.isHiddenOtherContact"
+                        class="lead black"
+                      >
+                        {{
+                          customer?.addresses &&
+                          (customer?.addresses)[otherContactIndex] &&
+                          otherContactIndex !== 0
+                            ? (customer?.addresses)[otherContactIndex][
+                                "phones"
+                              ][0]
+                            : (cardCustomerOtherContactForm?.controls)[
+                                "otherContact_workHomePhone"
+                              ]?.value
+                        }}
+                      </p>
+                    </label>
+                  </span>
+                </span>
+                <p
+                  class="error-msg-hint m-0"
+                  *ngIf="
+                    !switcher?.isHiddenOtherContact &&
+                    (cardCustomerOtherContactForm?.controls)[
+                      'otherContact_workHomePhone'
+                    ]?.errors?.invalidHomePhone &&
+                    !(cardCustomerOtherContactForm?.controls)[
+                      'otherContact_workHomePhone'
+                    ]?.errors?.atLeastOneFieldValid
+                  "
+                >
+                  *Must begin with 0 and have a length of 10 numeric characters
+                </p>
+                <p
+                  class="error-msg-hint m-0"
+                  *ngIf="
+                    !switcher?.isHiddenOtherContact &&
+                    (cardCustomerOtherContactForm?.controls)[
+                      'otherContact_workHomePhone'
+                    ]?.errors?.atLeastOneFieldValid
+                  "
+                >
+                  *Must insert at least one valid field
+                </p>
+              </div>
+            </div>
+
+            <div
+              *ngIf="(cardCustomerOtherContactForm?.controls)['relation']"
+              class="d-flex"
+            >
+              <span class="col-sm-12 mb-2" style="padding: unset">
+                <span class="mr-3">
+                  <label class="fullWidth" for="relation">
+                    <span class="titleFieldCard">Relationship</span>
+                    <select
+                      class="form-control"
+                      formControlName="relation"
+                      [attr.disabled]="
+                        !contactPreferredIsOtherOne ? true : null
+                      "
+                      [ngClass]="{
+                        'has-error':
+                          (cardCustomerOtherContactForm?.controls)['relation']
+                            ?.errors?.required &&
+                          !(cardCustomerOtherContactForm?.controls)['relation']
+                            ?.disabled
+                      }"
+                    >
+                      <option
+                        *ngFor="let opt of relationships"
+                        [value]="opt.code"
+                        >{{ opt.description }}
+                      </option>
+                    </select>
+                  </label>
+                </span>
+              </span>
+            </div>
+          </form>
+        </div>
+        <span
+          *ngIf="!switcher.isHiddenOtherContact && customerIdBool"
+          class="flex-row"
+          foot
+        >
+          <button
+            class="btn  flex-fill btn-outline-secondary p-1 mx-1"
+            (click)="
+              onCancel(cardCustomerOtherContactForm, 'isHiddenOtherContact')
+            "
+          >
+            cancel
+          </button>
+          <button
+            class="btn  flex-fill btn-primary p-1 mx-1"
+            [disabled]="!cardCustomerOtherContactForm?.valid"
+            (click)="saveForm('otherContact')"
+            type="submit"
+          >
+            Confirm
+          </button>
+        </span>
+      </fcw-card>
+    </div>
+
+    <!--------------------------------IDENTITY------------------------------------------------------------------------->
+    <div class="col-sm-4 col-md-5 mx-5">
+      <fcw-card
+        class="m-3 p-3  flex-fill"
+        [dataMenu]="dataMenuIdentityForm"
+        [card]="'identity'"
+        [isOtherContactPreferred]="true"
+        [showButton]="!isNewForm && !inEditing && !xid"
+        [footerHidden]="!switcher?.isHiddenIdentity && customerIdBool"
+        (eventFromCard)="
+          toggleEnable(
+            $event,
+            dataMenuIdentityForm[0].eventName,
+            cardCustomerIdentityForm,
+            'isHiddenIdentity'
+          )
+        "
+      >
+        <fcw-header-with-badge
+          [title]="'Identity'"
+          [card]="'identity'"
+          [contactPreferredIsOtherOne]="contactPreferredIsOtherOne"
+          [isNewForm]="isNewForm"
+          head
+        ></fcw-header-with-badge>
+        <div body>
+          <ngx-spinner
+            bdColor="rgba(255,255,255,0.8)"
+            color="#c5003e"
+            name="identity"
+            [fullScreen]="false"
+            type="ball-spin-clockwise"
+            size="medium"
+          ></ngx-spinner>
+          <form
+            *ngIf="cardCustomerIdentityForm"
+            class="form-group p-0 m-0 d-flex flex-column r"
+            [formGroup]="cardCustomerIdentityForm"
+            (ngSubmit)="onSubmitIdentify()"
+          >
+            <div class="d-flex col-sm-12">
+              <div
+                *ngIf="(cardCustomerIdentityForm?.controls)['birthday']"
+                class="col-sm-6 mr-form"
+              >
+                <label class="fullWidth" for="birthday">
+                  <span class="titleFieldCard">Date of Birth</span>
+                  <div class="col-xs-12 col-12 col-sm-6 col-md-12 p-0">
+                    <input
+                      *ngIf="!switcher.isHiddenIdentity"
+                      [ngClass]="{
+                        'has-error':
+                          !(cardCustomerIdentityForm?.controls)['birthday']
+                            ?.valid ||
+                          (cardCustomerIdentityForm?.controls)['birthday']
+                            ?.value === null
+                      }"
+                      type="text"
+                      class="form-control"
+                      placeholder="Select Date Of Birth"
+                      [ngModel]="customer?.birthday"
+                      bsDatepicker
+                      [maxDate]="maxDate"
+                      formControlName="birthday"
+                      [bsConfig]="{
+                        containerClass: 'theme-default'
+                      }"
+                    />
+                  </div>
+                  <p *ngIf="switcher.isHiddenIdentity" class="lead black">
+                    {{
+                      customer?.birthday === nullChar
+                        ? ""
+                        : (customer?.birthday | date: "dd MMMM yyyy")
+                    }}
+                  </p>
+                </label>
+              </div>
+
+              <div *ngIf="languageList" class="col-sm-6" style="padding: unset">
+                <label
+                  *ngIf="(cardCustomerIdentityForm?.controls)['languageCtrl']"
+                  class="fullWidth"
+                  for="languageDescription"
+                >
+                  <span class="titleFieldCard">Language</span>
+
+                  <select
+                    *ngIf="!switcher.isHiddenIdentity"
+                    class="form-control"
+                    formControlName="languageCtrl"
+                    id="languageDescription"
+                    placeholder="languageDescription"
+                  >
+                    <option
+                      *ngFor="let lang of languageList"
+                      [selected]="
+                        customer?.languageCode !== nullChar
+                          ? lang.code === customer?.languageCode
+                          : lang.code === 'en-AU'
+                      "
+                      [value]="lang.code"
+                    >
+                      {{ lang.description }}
+                    </option>
+                  </select>
+                  <p *ngIf="switcher.isHiddenIdentity" class="lead mb-0 black">
+                    {{ customer?.languageDescription }}
+                  </p>
+                </label>
+              </div>
+            </div>
+
+            <div class="d-flex col-sm-12 mb-2">
+              <div
+                *ngIf="(cardCustomerIdentityForm?.controls)['salutationCtrl']"
+                class="col-sm-6 mr-form"
+              >
+                <label class="fullWidth" for="salutation">
+                  <span class="titleFieldCard">Salutation</span>
+                  <select
+                    *ngIf="!switcher.isHiddenIdentity"
+                    class="form-control"
+                    formControlName="salutationCtrl"
+                    id="salutation"
+                    placeholder="salutation"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerIdentityForm?.controls)[
+                        'salutationCtrl'
+                      ]?.valid
+                    }"
+                  >
+                    <option
+                      *ngFor="let salutation of salutationList"
+                      [selected]="
+                        customer?.salutationCode !== nullChar
+                          ? salutation.code == customer?.salutationCode
+                          : salutation.code == '999'
+                      "
+                      [value]="salutation.code"
+                    >
+                      {{ salutation.description }}
+                    </option>
+                  </select>
+                  <p *ngIf="switcher.isHiddenIdentity" class="lead mb-0 black">
+                    {{ customer?.salutationDescription }}
+                  </p>
+                </label>
+              </div>
+              <div
+                *ngIf="(cardCustomerIdentityForm?.controls)['genderCtrl']"
+                class="col-sm-6"
+                style="padding: unset"
+              >
+                <label class="fullWidth" for="gender">
+                  <span class="titleFieldCard">Gender</span>
+                  <select
+                    *ngIf="!switcher.isHiddenIdentity"
+                    class="form-control"
+                    formControlName="genderCtrl"
+                    id="gender"
+                    placeholder="gender"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerIdentityForm?.controls)[
+                        'genderCtrl'
+                      ]?.valid
+                    }"
+                  >
+                    <option
+                      *ngFor="let genderItem of genderList"
+                      [selected]="
+                        customer?.genderCode !== nullChar
+                          ? genderItem.code === customer?.genderCode
+                          : genderItem.code === 'U'
+                      "
+                      [value]="genderItem.code"
+                    >
+                      {{ genderItem.description }}
+                    </option>
+                  </select>
+                  <p *ngIf="switcher.isHiddenIdentity" class="lead mb-0 black">
+                    {{ customer?.genderDescription }}
+                  </p>
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <span
+          *ngIf="!switcher.isHiddenIdentity && customerIdBool"
+          class="flex-row"
+          foot
+        >
+          <button
+            class="btn  flex-fill btn-outline-secondary p-1 mx-1"
+            (click)="onCancel(cardCustomerIdentityForm, 'isHiddenIdentity')"
+          >
+            cancel
+          </button>
+          <button
+            class="btn  flex-fill btn-primary p-1 mx-1"
+            [disabled]="!cardCustomerIdentityForm?.valid"
+            (click)="saveForm('identity')"
+            type="submit"
+          >
+            Confirm
+          </button>
+        </span>
+      </fcw-card>
+      <fcw-card
+        class="m-3 p-3  flex-fill"
+        [dataMenu]="dataMenuAddressForm"
+        [card]="'address'"
+        [isOtherContactPreferred]="true"
+        [showButton]="!isNewForm && !inEditing && !xid"
+        [footerHidden]="!switcher?.isHiddenAddress && customerIdBool"
+        [isNewForm]="isNewForm"
+        (eventFromCard)="
+          toggleEnable(
+            $event,
+            'editToggleAddress',
+            cardCustomerAddressForm,
+            'isHiddenAddress'
+          )
+        "
+      >
+        <fcw-header-with-badge
+          head
+          [card]="'address'"
+          [contactPreferredIsOtherOne]="contactPreferredIsOtherOne"
+          [isNewForm]="isNewForm"
+          [title]="'Address'"
+        ></fcw-header-with-badge>
+        <div body>
+          <ngx-spinner
+            bdColor="rgba(255,255,255,0.8)"
+            color="#c5003e"
+            name="address"
+            [fullScreen]="false"
+            type="ball-spin-clockwise"
+            size="medium"
+          ></ngx-spinner>
+          <form
+            *ngIf="cardCustomerAddressForm"
+            class="form-group p-0 m-0"
+            [formGroup]="cardCustomerAddressForm"
+            (ngSubmit)="onSubmitContact()"
+          >
+            <div
+              *ngIf="(cardCustomerAddressForm?.controls)['addressType']"
+              class="d-flex my-1"
+            >
+              <span class="col-sm-12" style="padding: unset">
+                <span class="mr-3">
+                  <label class="fullWidth" for="addressType">
+                    <span class="titleFieldCard">Address Type</span>
+                    <!--formControlName="addressType"-->
+                    <select
+                      [value]="
+                        cardCustomerAddressForm.controls['addressType'].value
+                      "
+                      formControlName="addressType"
+                      (change)="handleLocalAddressChange($event)"
+                      class="form-control"
+                      id="addressType"
+                    >
+                      <!--todo: create address type id from boolean-->
+                      <option
+                        *ngFor="let addressType of addressTypeList"
+                        [selected]="addressType.code === '001'"
+                        [value]="addressType.code"
+                      >
+                        {{ addressType.description }}
+                      </option>
+                    </select>
+                  </label>
+                </span>
+              </span>
+            </div>
+            <div class="d-flex my-1">
+              <div
+                *ngIf="(cardCustomerAddressForm?.controls)['addressLine1']"
+                class="col-sm-6 mr-form"
+              >
+                <label class="fullWidth" for="addressLine1">
+                  <div class="d-flex align-items-center">
+                    <span class="titleFieldCard">Address Line 1:</span>
+                    <div *ngIf="typeaheadLoading">
+                      <img
+                        src="./../../../assets/img/svg/spinner-autocomplete.svg"
+                        style="width:20px; height: 20px;"
+                      /><span>Loading</span>
+                    </div>
+                  </div>
+                  <!-- <input
+                    *ngIf="!switcher.isHiddenAddress"
+                    class="form-control lead mb-0"
+                    formControlName="addressLine1"
+                    [ngClass]="{
+                      'has-error': !cardCustomerAddressForm?.controls[
+                        'addressLine1'
+                      ]?.valid
+                    }"
+                    id="addressLine1"
+                    name="addressLine1"
+                    type="text"
+                  /> -->
+                  <input
+                    formControlName="addressLine1"
+                    *ngIf="!switcher.isHiddenAddress"
+                    [typeaheadAsync]="true"
+                    [typeaheadMinLength]="3"
+                    typeaheadWaitMs="1000"
+                    [typeahead]="dataSource"
+                    [isAnimated]="true"
+                    (typeaheadLoading)="changeTypeaheadLoading($event)"
+                    (typeaheadOnSelect)="typeaheadOnSelect($event)"
+                    typeaheadOptionField="description"
+                    placeholder="Type for addresses"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerAddressForm?.controls)[
+                        'addressLine1'
+                      ]?.valid
+                    }"
+                    class="form-control"
+                  />
+                  <p *ngIf="switcher.isHiddenAddress" class="lead black">
+                    {{
+                      localAddresses[appointmentTypeIndex]
+                        ? localAddresses[appointmentTypeIndex].addressLine1
+                        : ""
+                    }}
+                  </p>
+                </label>
+              </div>
+
+              <div
+                *ngIf="(cardCustomerAddressForm?.controls)['addressLine2']"
+                class="col-sm-6 fixxer"
+              >
+                <label class="fullWidth" for="addressLine2">
+                  <span class="titleFieldCard">Address Line 2:</span>
+                  <input
+                    *ngIf="!switcher.isHiddenAddress"
+                    class="form-control lead mb-0"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerAddressForm?.controls)[
+                        'addressLine2'
+                      ]?.valid
+                    }"
+                    formControlName="addressLine2"
+                    id="addressLine2"
+                    name="addressLine2"
+                    type="text"
+                  />
+                  <p *ngIf="switcher.isHiddenAddress" class="lead black">
+                    {{
+                      localAddresses[appointmentTypeIndex]
+                        ? localAddresses[appointmentTypeIndex].addressLine2
+                        : ""
+                    }}
+                  </p>
+                </label>
+              </div>
+            </div>
+            <!--	City        -->
+            <div class="d-flex my-1">
+              <div
+                *ngIf="(cardCustomerAddressForm?.controls)['city']"
+                class="col-sm-6 mr-form"
+              >
+                <label class="fullWidth" for="city">
+                  <span class="titleFieldCard">Suburb</span>
+                  <input
+                    [ngClass]="{
+                      'has-error': !(cardCustomerAddressForm?.controls)['city']
+                        ?.valid
+                    }"
+                    pattern="^[a-zA-Z\s]*$"
+                    *ngIf="!switcher.isHiddenAddress"
+                    class="form-control lead mb-0"
+                    formControlName="city"
+                    id="city"
+                    name="city"
+                    type="text"
+                  />
+                  <p *ngIf="switcher.isHiddenAddress" class="lead black">
+                    {{
+                      localAddresses[appointmentTypeIndex]
+                        ? localAddresses[appointmentTypeIndex].city
+                        : ""
+                    }}
+                  </p>
+                </label>
+              </div>
+
+              <!--	State       -->
+
+              <div
+                *ngIf="(cardCustomerAddressForm?.controls)['stateCode']"
+                class="col-sm-6 fixxer"
+              >
+                <label class="fullWidth" for="state">
+                  <span class="titleFieldCard">State</span>
+                  <select
+                    *ngIf="!switcher.isHiddenAddress"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerAddressForm?.controls)[
+                        'stateCode'
+                      ]?.valid
+                    }"
+                    class="form-control"
+                    formControlName="stateCode"
+                    id="state"
+                    name="state"
+                    [value]="localAddresses[appointmentTypeIndex]?.stateCode"
+                    placeholder="status"
+                  >
+                    <option
+                      *ngFor="let state of stateList"
+                      [selected]="
+                        state.code ===
+                        localAddresses[appointmentTypeIndex]?.stateCode
+                      "
+                      [value]="state.code"
+                    >
+                      {{ state.name }}
+                    </option>
+                  </select>
+                  <!-- <input
+                    *ngIf="!switcher.isHiddenAddress"
+                    class="form-control lead mb-0"
+                    [ngClass]="{
+                      'has-error': !cardCustomerAddressForm.controls[
+                        'stateCode'
+                      ].valid
+                    }"
+                    formControlName="stateCode"
+                    maxlength="3"
+                    (keydown)="alphaOnly($event)"
+                    id="state"
+                    name="state"
+                    type="text"
+                  /> -->
+                  <p *ngIf="switcher.isHiddenAddress" class="lead black">
+                    {{
+                      localAddresses[appointmentTypeIndex]
+                        ? localAddresses[appointmentTypeIndex].stateCode
+                        : ""
+                    }}
+                  </p>
+                </label>
+              </div>
+            </div>
+            <div class="d-flex my-2">
+              <!--	POST Code    -->
+
+              <div
+                *ngIf="(cardCustomerAddressForm?.controls)['zipCode']"
+                class="col-sm-6"
+                style="padding: unset"
+              >
+                <label class="fullWidth" for="prefName">
+                  <span class="titleFieldCard">Post Code</span>
+                  <input
+                    maxlength="4"
+                    [ngClass]="{
+                      'has-error': !cardCustomerAddressForm.controls['zipCode']
+                        ?.valid
+                    }"
+                    *ngIf="!switcher.isHiddenAddress"
+                    class="form-control lead mb-0"
+                    formControlName="zipCode"
+                    pattern="^[0-9]{4}$"
+                    id="sip"
+                    name="zip"
+                    type="text"
+                  />
+                  <p *ngIf="switcher.isHiddenAddress" class="lead black">
+                    {{
+                      localAddresses[appointmentTypeIndex]
+                        ? localAddresses[appointmentTypeIndex].zipCode
+                        : ""
+                    }}
+                  </p>
+                </label>
+              </div>
+            </div>
+            <div *ngIf="isNewForm || xid" class="d-flex fullWidth m-2">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                [value]="
+                  this.cardCustomerAddressForm.controls['addressType']
+                    ? this.cardCustomerAddressForm.controls['addressType'].value
+                    : null
+                "
+                (click)="handleLocalAddressCancel($event)"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                [disabled]="!this.cardCustomerAddressForm?.valid"
+                class="btn btn-outline-primary ml-2"
+                [value]="
+                  this.cardCustomerAddressForm.controls['addressType']
+                    ? this.cardCustomerAddressForm.controls['addressType'].value
+                    : null
+                "
+                (click)="handleLocalAddressSave($event.target.value)"
+              >
+                Save Address
+              </button>
+            </div>
+          </form>
+        </div>
+        <span
+          *ngIf="!switcher.isHiddenAddress && customerIdBool"
+          class="flex-row"
+          foot
+        >
+          <button
+            class="btn  flex-fill btn-outline-secondary p-1 mx-1"
+            (click)="onCancel(cardCustomerAddressForm, 'isHiddenAddress')"
+            [disabled]="
+              typeaheadLoading ||
+              ((cardCustomerAddressForm?.controls)['addressLine1'].value !==
+                null &&
+                (cardCustomerAddressForm?.controls)['addressLine1'].value
+                  .length < 3)
+            "
+          >
+            cancel
+          </button>
+          <!--          <button class="btn  flex-fill btn-primary p-1 mx-1" (click)="saveForm('address')" type="submit">Confirm</button>-->
+          <button
+            class="btn  flex-fill btn-primary p-1 mx-1"
+            [disabled]="
+              !cardCustomerAddressForm?.valid ||
+              typeaheadLoading ||
+              ((cardCustomerAddressForm?.controls)['addressLine1'].value !==
+                null &&
+                (cardCustomerAddressForm?.controls)['addressLine1'].value
+                  .length < 3)
+            "
+            (click)="
+              saveForm(
+                'address',
+                (cardCustomerAddressForm?.controls)['addressType']?.value
+              )
+            "
+            type="submit"
+          >
+            Confirm
+          </button>
+        </span>
+      </fcw-card>
+      <!--------------------------------Account--------------------->
+      <fcw-card
+        [card]="'account'"
+        [isOtherContactPreferred]="true"
+        class="m-3 p-3  flex-fill"
+        [dataMenu]="dataMenuAccount"
+        [showButton]="!isNewForm && !inEditing && !xid"
+        [footerHidden]="!switcher?.isHiddenAccount && customerIdBool"
+        (eventFromCard)="
+          toggleEnable(
+            $event,
+            dataMenuAccount[0].eventName,
+            cardCustomerAccountForm,
+            'isHiddenAccount'
+          )
+        "
+      >
+        <fcw-header-with-badge
+          [card]="'account'"
+          [contactPreferredIsOtherOne]="contactPreferredIsOtherOne"
+          [title]="'Account'"
+          [isNewForm]="isNewForm"
+          head
+        ></fcw-header-with-badge>
+        <div body>
+          <ngx-spinner
+            bdColor="rgba(255,255,255,0.8)"
+            color="#c5003e"
+            name="account"
+            [fullScreen]="false"
+            type="ball-spin-clockwise"
+            size="medium"
+          ></ngx-spinner>
+          <form
+            class="form-group p-0 m-0"
+            *ngIf="cardCustomerAccountForm"
+            [formGroup]="cardCustomerAccountForm"
+            (ngSubmit)="onSubmitIdentify()"
+          >
+            <div class="">
+              <div class="col-sm-12" style="padding: unset">
+                <label for="id">
+                  <span class="titleFieldCard">Customer ID:</span>
+                  <!--                  <input *ngIf="!switcher.isHiddenAccount"
+                         class="form-control lead mb-0"
+                         formControlName="id"
+                         id="id"
+                         name="id"
+                         type="text"
+                  >-->
+                  <p id="id" class="lead black">{{ customer?.id }}</p>
+                </label>
+              </div>
+              <!--            -	Account Status                -->
+              <div
+                *ngIf="cardCustomerAccountForm.controls['statusDescription']"
+                class="col-sm-12"
+                style="padding: unset"
+              >
+                <label class="fullWidth" for="status">
+                  <span class="titleFieldCard">Account Status:</span>
+                  <select
+                    *ngIf="!switcher.isHiddenAccount"
+                    class="form-control"
+                    formControlName="statusDescription"
+                    id="status"
+                    [value]="customer?.statusCode"
+                    placeholder="status"
+                    [ngClass]="{
+                      'has-error':
+                        cardCustomerAccountForm.controls['statusDescription']
+                          ?.errors?.required
+                    }"
+                  >
+                    <option
+                      *ngFor="let status of statusList"
+                      [selected]="status.code === customer?.statusCode"
+                      [value]="status.code"
+                    >
+                      {{ status.description }}
+                    </option>
+                  </select>
+                  <p *ngIf="switcher.isHiddenAccount" class="lead mb-0 black">
+                    {{ customer?.statusDescription }}
+                  </p>
+                </label>
+              </div>
+              <!--            -	Funding Type                  -->
+              <div
+                *ngIf="(cardCustomerAccountForm?.controls)['fundingType']"
+                class="col-sm-12"
+                style="padding: unset"
+              >
+                <label class="fullWidth" for="funding">
+                  <span class="titleFieldCard">Funding Type:</span>
+                  <select
+                    *ngIf="!switcher.isHiddenAccount"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerAccountForm?.controls)[
+                        'fundingType'
+                      ]?.valid
+                    }"
+                    class="form-control"
+                    formControlName="fundingType"
+                    id="funding"
+                    placeholder="funding"
+                    value="PVT"
+                  >
+                    <option
+                      *ngFor="let fund of fundingList"
+                      [value]="fund.code"
+                    >
+                      {{ fund.description }}
+                    </option>
+                  </select>
+                  <p *ngIf="switcher.isHiddenAccount" class="lead mb-0 black">
+                    {{ customer?.fundingType }}
+                  </p>
+                </label>
+              </div>
+              <!--            -	Clinic Name                   -->
+              <div
+                *ngIf="(cardCustomerAccountForm?.controls)['shopcode']"
+                class="col-sm-12 mb-2"
+                style="padding: unset"
+              >
+                <label class="fullWidth" for="clinic">
+                  <span class="titleFieldCard">Clinic Name:</span>
+                  <select
+                    *ngIf="!switcher.isHiddenAccount"
+                    [ngClass]="{
+                      'has-error': !(cardCustomerAccountForm?.controls)[
+                        'shopcode'
+                      ]?.valid
+                    }"
+                    class="form-control"
+                    formControlName="shopcode"
+                    id="clinic"
+                    placeholder="funding"
+                    [value]="customer?.shopCode"
+                  >
+                    <option
+                      *ngFor="let clinic of clinicList"
+                      [value]="clinic.code"
+                    >
+                      {{ clinic?.description }}
+                    </option>
+                  </select>
+                  <p
+                    *ngIf="switcher.isHiddenAccount && clinicList"
+                    class="lead mb-0 black"
+                  >
+                    {{ getClinicName() }}
+                    <span style="cursor: pointer;" class="d-inline-block ml-2" (click)="openInfoModal()"
+                      ><img
+                        src="../../../assets/img/svg/info-icon.svg"
+                        alt=""
+                        style="height: 20px; width: auto;"
+                    /></span>
+                  </p>
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <span
+          *ngIf="!switcher.isHiddenAccount && customerIdBool"
+          class="flex-row"
+          foot
+        >
+          <button
+            class="btn  flex-fill btn-outline-secondary p-1 mx-1"
+            (click)="onCancel(cardCustomerIdentityForm, 'isHiddenAccount')"
+          >
+            cancel
+          </button>
+          <button
+            class="btn  flex-fill btn-primary p-1 mx-1"
+            [disabled]="!cardCustomerAccountForm.valid"
+            (click)="saveForm('account')"
+            type="submit"
+          >
+            Confirm
+          </button>
+        </span>
+      </fcw-card>
+    </div>
+  </div>
+  <ngx-spinner
+    bdColor="rgba(255,255,255,0.8)"
+    color="#c5003e"
+    name="total"
+    [fullScreen]="false"
+    type="ball-spin-clockwise"
+    size="medium"
+  ></ngx-spinner>
+</div>

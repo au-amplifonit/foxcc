@@ -1,0 +1,46 @@
+<ul class="nav navbar-nav">
+<li class="py-3" routerLinkActive="active" #searchLinkStatus="routerLinkActive">
+    <a routerLink="/main/custSearch" class="text-secondary" (click)="switchHamStatus($event)">
+    <div class="d-flex align-items-center">
+        <span class="align-middle">
+            <svg-icon class="s p-2" src=
+            "{{ searchLinkStatus.isActive ? '../../../../assets/img/svg/search.svg' : '../../../../assets/img/svg/search_2.svg' }}"></svg-icon>
+        </span>
+             <span class="align-middle ml-3">Customer Search</span>
+         </div>
+    </a>
+</li>
+<li class="py-3" routerLinkActive="active" #CScheduleLinkStatus="routerLinkActive">
+  <a routerLink="/main/clinical-schedule" class="text-secondary" (click)="switchHamStatus($event)">
+    <div class="d-flex align-items-center">
+      <span class="align-middle">
+        <svg-icon class="s p-2" src=
+        "{{ CScheduleLinkStatus.isActive ? '../../../../assets/img/svg/book-appointment-grey_3.svg' : '../../../../assets/img/svg/book-appointment-grey_2.svg' }}"></svg-icon>
+      </span>
+      <span class="align-middle ml-3">Clinic Schedule</span>
+    </div>
+          </a>
+        </li>
+        <li class="py-3" routerLinkActive="active" #CFinderLinkStatus="routerLinkActive">
+          <a routerLink="/main/custProfile" class="text-secondary" (click)="switchHamStatus($event)">
+            <div class="d-flex align-items-center">
+              <span class="align-middle">
+                <svg-icon class="s p-2" src=
+                "{{ CFinderLinkStatus.isActive ? '../../../../assets/img/svg/find-store-grey_3.svg' : '../../../../assets/img/svg/find-store-grey_2.svg' }}"></svg-icon>
+              </span>
+              <span class="align-middle ml-3">Clinic Finder</span>
+            </div>
+          </a>
+        </li>
+        <li class="py-3" routerLinkActive="active" #PrescreeningLinkStatus="routerLinkActive">
+          <a routerLink="#" class="text-secondary" (click)="switchHamStatus($event)">
+            <div class="d-flex align-items-center">
+              <span class="align-middle">
+                <svg-icon class="s p-2" src=
+                "{{ PrescreeningLinkStatus.isActive ? '../../../../assets/img/svg/add-person_3.svg' : '../../../../assets/img/svg/add-person_2.svg' }}"></svg-icon>
+              </span>
+              <span class="align-middle ml-3">Prescreening</span>
+            </div>
+          </a>
+        </li>
+</ul>

@@ -1,0 +1,50 @@
+div.main-header {
+  height: 3.5rem;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.main-title {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+div.main-content{
+  height: calc(100vh - 12rem);
+}
+
+button{
+  outline: 0;
+}
+
+.negative-margin {
+  margin-left: -15px;
+}
+
+div.mbtn{
+  z-index: 3050;
+}
+
+::ng-deep .bs-datepicker-container {
+  width: 100% !important;
+  padding: 0px !important;
+}
+
+::ng-deep .bs-datepicker-body {
+  border: none!important;
+}
+
+::ng-deep .bs-datepicker-body table td span {
+  border-radius: unset !important;
+}
+
+::ng-deep .bs-datepicker {
+  box-shadow: none !important;
+}
+
+::ng-deep bs-datepicker-inline-container {
+  width: 100% !important;
+}
+
+::ng-deep bs-days-calendar-view {
+  width: 100% !important;
+}

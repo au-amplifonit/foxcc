@@ -1,0 +1,7 @@
+<span *ngIf="customer$ | async as customer" class="d-flex flex-row rounded align-items-center">
+    <h3 class="lead medium pr-3">
+        {{customer.salutationDescription}} {{customer.firstname}} {{customer.lastname}}
+    </h3>
+    <fcw-badge-generic class="m-1" [text]="customer.statusDescription" [type]="'success'"></fcw-badge-generic>
+    <span class="badge badge-info text-info bg-white border border-info p-2 m-1">{{customer.fundingType}}</span>
+</span>

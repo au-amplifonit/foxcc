@@ -1,0 +1,7 @@
+{
+  "/Fox.Microservices.Customers/api/v1/": {
+    "target": "http://sau02ap02foxsit.d09.root.sys",
+    "secure": false
+  },
+  "changeOrigin": true
+}
